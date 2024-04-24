@@ -3,6 +3,8 @@
 #include "entity.h"
 #include "graphics/material.h"
 
+class Mesh;
+
 class EntityMesh : public Entity
 {
 public:

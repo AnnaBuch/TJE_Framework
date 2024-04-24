@@ -23,7 +23,7 @@ void EntityMesh::render()
 		material.shader->setUniform("u_model", getGlobalMatrix());
 
 	if (isInstanced)
-		mesh->renderInstanced(GL_TRIANGLES, models.data(), );
+		mesh->renderInstanced(GL_TRIANGLES, models.data(), 1);
 	else
 		mesh->render(GL_TRIANGLES);
 		
