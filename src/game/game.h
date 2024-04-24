@@ -10,6 +10,8 @@
 #include "framework/entities/entity.h"
 #include "graphics/material.h"
 
+class Stage;
+
 class Game
 {
 public:
@@ -30,10 +32,6 @@ public:
 	//some vars
 	Camera* camera; //our global camera
 	bool mouse_locked; //tells if the mouse is locked (not seen)
-
-	//TODO: move to world class DO NOT LEAVE HERE!!
-	Entity* root = nullptr;
-	//std::map<string , sRenderData> 
 
 	Game( int window_width, int window_height, SDL_Window* window );
 
