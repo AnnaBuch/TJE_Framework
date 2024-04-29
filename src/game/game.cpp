@@ -5,6 +5,8 @@
 #include "graphics/fbo.h"
 #include "graphics/shader.h"
 #include "framework/input.h"
+#include "world.h"
+#include "framework/entities/entityMesh.h"
 
 #include <cmath>
 
@@ -12,10 +14,13 @@
 Mesh* mesh = NULL;
 Texture* texture = NULL;
 Shader* shader = NULL;
+EntityMesh* root = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
 
 Game* Game::instance = NULL;
+World* World::instance = NULL;
+
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -44,14 +49,18 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	texture = Texture::Get("data/textures/texture.tga");
 
 	// Example of loading Mesh from Mesh Manager
-	mesh = Mesh::Get("data/meshes/box.ASE");
+	mesh = Mesh::Get("data/meshes/spaceship.obj");
 
 	// Example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
+	root = new EntityMesh(mesh, Material(), "");
+
+
+	World::instance = new World(camera, root);
 
 	//PARSE SCENE HERE
-	//parseSceen(...);
+	bool senecCheck = World::instance->parseScene("data/myscene.scene");
 
 	// Hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -70,15 +79,15 @@ void Game::render(void)
 	camera->enable();
 
 	// Set flags
-	glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
+	//glDisable(GL_BLEND);
+	//glEnable(GL_DEPTH_TEST);
+	//glDisable(GL_CULL_FACE);
    
 	// Create model matrix for cube
 	Matrix44 m;
-	m.rotate(angle*DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
-
-	if(shader)
+	//m.rotate(angle*DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
+	root->render();
+	/*if (shader)
 	{
 		// Enable shader
 		shader->enable();
@@ -92,10 +101,13 @@ void Game::render(void)
 
 		// Do the draw call
 		mesh->render( GL_TRIANGLES );
+		//World::instance->root->render(camera);
+
+
 
 		// Disable shader
 		shader->disable();
-	}
+	}*/
 
 	// Draw the floor grid
 	drawGrid();
@@ -128,6 +140,7 @@ void Game::update(double seconds_elapsed)
 	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
 	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f,0.0f, 0.0f) * speed);
 }
+
 
 //Keyboard event handler (sync input)
 void Game::onKeyDown( SDL_KeyboardEvent event )

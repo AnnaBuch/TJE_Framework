@@ -24,9 +24,11 @@ void EntityMesh::render()
 
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+
 
 	if (!material.shader) {
-		material.shader = Shader::Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs");
+		material.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");//Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs");
 	}
 
 	
@@ -68,7 +70,14 @@ void EntityMesh::render()
 
 }
 
-void EntityMesh::update(float deltaTime) 
+EntityMesh::EntityMesh(Mesh* mesh, const Material& material, const std::string& name)
+{
+	this->mesh = mesh;
+	this->material = material;
+	this->name = name;
+}
+
+void EntityMesh::update(float deltaTime)
 {
 	Entity::update(deltaTime);
 }
@@ -86,5 +95,7 @@ void EntityMesh::addLOD(sMeshLOD mesh_lod) {
 		return a.distance < b.distance;
 	});
 }
+
+
 
 

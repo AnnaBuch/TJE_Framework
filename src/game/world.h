@@ -2,7 +2,7 @@
 
 #include "framework/includes.h"
 #include "framework/utils.h"
-#include <graphics/material.h>
+#include "graphics/material.h"
 #include <map>
 
 class Entity;
@@ -10,15 +10,16 @@ class Camera;
 
 class World {
 public:
-
-	//TODO: move to world class DO NOT LEAVE HERE!!
+	static World* instance;
+	
 	Entity* root = nullptr;
-	std::map<std::string, sRenderData> meshed_to_load;
+	std::map<std::string, sRenderData> meshes_to_load;
 	Camera* camera = nullptr;
 	//Player* player = nullptr; //TODO: implement player calss
 
-	void world() {};
-	void render() {};
+	World(Camera* camera, Entity* root);
+	//void render();
 
-	void update(double deltaTime);
+	//void update(double deltaTime);
+	bool parseScene(const char* filename);
 };
