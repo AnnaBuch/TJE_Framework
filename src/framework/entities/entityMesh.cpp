@@ -3,6 +3,7 @@
 #include "graphics/shader.h"
 #include "graphics/mesh.h"
 #include <algorithm>
+#include "game/world.h"
 
 
 
@@ -12,7 +13,7 @@ void EntityMesh::render()
 	if (!mesh) return;
 
 	// Get the last camera that was activated 
-	Camera* camera = Camera::current;
+	Camera* camera = World::instance->camera;
 
 	//optimization class->draw only if it is being seen
 	Vector3 center_world = model * mesh->box.center;
@@ -36,7 +37,7 @@ void EntityMesh::render()
 	material.shader->enable();
 
 	material.shader->setUniform("u_color", material.color);
-	material.shader->setUniform("u_viewproj", camera->viewprojection_matrix);
+	material.shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
 
 	if (material.diffuse)
 		material.shader->setUniform("u_texture", material.diffuse, 0); //TODO: change the 0 when necessary

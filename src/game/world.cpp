@@ -2,6 +2,8 @@
 #include "framework/includes.h"
 #include "framework/entities/entityMesh.h"
 #include "graphics/mesh.h"
+#include "graphics/shader.h"
+#include "graphics/texture.h"
 #include <fstream> 
 
 
@@ -9,6 +11,18 @@ World::World(Camera* camera, Entity* root)
 {
 	this->camera = camera;
 	this->root = root;
+
+	
+	/*landscape_cubemap.diffuse->loadCubemap("landscape", {
+		"data/textures/skybox/right.png",
+		"data/textures/skybox/left.png",
+		"data/textures/skybox/bottom.png",
+		"data/textures/skybox/top.png",
+		"data/textures/skybox/front.png",
+		"data/textures/skybox/back.png"
+		});*/
+
+
 
 }/*
 void World::render() {

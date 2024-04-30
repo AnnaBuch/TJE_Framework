@@ -15,12 +15,13 @@ Mesh* mesh = NULL;
 Texture* texture = NULL;
 Shader* shader = NULL;
 EntityMesh* root = NULL;
+EntityMesh* cube = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
 
 Game* Game::instance = NULL;
 World* World::instance = NULL;
-
+Material landscape_cubemap;
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -54,13 +55,31 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	// Example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
-	root = new EntityMesh(mesh, Material(), "");
+	Material mat = Material();
+	mat.shader = shader;
+	mat.diffuse = texture;
+	root = new EntityMesh(mesh, mat, "spaceship");
 
 
 	World::instance = new World(camera, root);
 
+	
+
+	landscape_cubemap.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/cubemap.fs");
+	landscape_cubemap.diffuse = new Texture();
+	landscape_cubemap.diffuse->loadCubemap("landscape", {
+	"data/negx.png",
+	"data/negy.png",
+	"data/negz.png",
+	"data/posx.png",
+	"data/posy.png",
+	"data/posz.png"
+		});
+
+	cube = new EntityMesh(Mesh::Get("data/meshes/cube.ASE"), landscape_cubemap, "");
+
 	//PARSE SCENE HERE
-	bool senecCheck = World::instance->parseScene("data/myscene.scene");
+	//bool senecCheck = World::instance->parseScene("data/myscene.scene");
 
 	// Hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -76,7 +95,13 @@ void Game::render(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Set the camera as default
-	camera->enable();
+	World::instance->camera->enable();
+	
+	glDisable(GL_DEPTH_TEST);
+	cube->material.shader->setUniform("u_camera_pos", World::instance->camera->eye);
+	cube->render();
+	glEnable(GL_DEPTH_TEST);
+	
 
 	// Set flags
 	//glDisable(GL_BLEND);
