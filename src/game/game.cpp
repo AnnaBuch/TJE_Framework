@@ -7,6 +7,8 @@
 #include "framework/input.h"
 #include "world.h"
 #include "framework/entities/entityMesh.h"
+#include "framework/entities/entityCollider.h"
+
 
 #include <cmath>
 
@@ -14,7 +16,7 @@
 Mesh* mesh = NULL;
 Texture* texture = NULL;
 Shader* shader = NULL;
-EntityMesh* root = NULL;
+EntityMesh* space_ship = NULL;
 EntityMesh* cube = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
@@ -58,13 +60,12 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	Material mat = Material();
 	mat.shader = shader;
 	mat.diffuse = texture;
-	root = new EntityMesh(mesh, mat, "spaceship");
+	space_ship = new EntityMesh(mesh, mat, "spaceship");
 
 
-	World::instance = new World(camera, root);
+	World::instance = new World(camera, space_ship);
 
 	
-
 	landscape_cubemap.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/cubemap.fs");
 	landscape_cubemap.diffuse = new Texture();
 	landscape_cubemap.diffuse->loadCubemap("landscape", {
@@ -76,7 +77,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	"data/posz.png"
 		});
 
-	cube = new EntityMesh(Mesh::Get("data/meshes/cube.ASE"), landscape_cubemap, "");
+	cube = new EntityMesh(Mesh::Get("data/meshes/cubemap.ASE"), landscape_cubemap, "");
 
 	//PARSE SCENE HERE
 	//bool senecCheck = World::instance->parseScene("data/myscene.scene");
@@ -97,10 +98,10 @@ void Game::render(void)
 	// Set the camera as default
 	World::instance->camera->enable();
 	
-	glDisable(GL_DEPTH_TEST);
-	cube->material.shader->setUniform("u_camera_pos", World::instance->camera->eye);
-	cube->render();
-	glEnable(GL_DEPTH_TEST);
+	// glDisable(GL_DEPTH_TEST);
+	// cube->material.shader->setUniform("u_camera_pos", World::instance->camera->eye);
+	// cube->render();
+	// glEnable(GL_DEPTH_TEST);
 	
 
 	// Set flags
@@ -111,8 +112,8 @@ void Game::render(void)
 	// Create model matrix for cube
 	Matrix44 m;
 	//m.rotate(angle*DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
-	root->render();
-	/*if (shader)
+	//space_ship->render(G)
+	if (shader)
 	{
 		// Enable shader
 		shader->enable();
@@ -132,7 +133,7 @@ void Game::render(void)
 
 		// Disable shader
 		shader->disable();
-	}*/
+	}
 
 	// Draw the floor grid
 	drawGrid();
@@ -151,7 +152,7 @@ void Game::update(double seconds_elapsed)
 	// Example
 	angle += (float)seconds_elapsed * 10.0f;
 
-	// Mouse input to rotate the cam
+	/*// Mouse input to rotate the cam
 	if (Input::isMousePressed(SDL_BUTTON_LEFT) || mouse_locked) //is left button pressed?
 	{
 		camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f,-1.0f,0.0f));
@@ -164,6 +165,55 @@ void Game::update(double seconds_elapsed)
 	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f,-1.0f) * speed);
 	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
 	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f,0.0f, 0.0f) * speed);
+	*/
+	Vector3 eye;
+	Vector3 center;
+
+	float orbit_dist = 0.8f;
+	eye = space_ship->model.getTranslation();// -front * orbit_dist;
+	center = space_ship->model.getTranslation();
+	//World::instance->camera->lookAt(eye, center, Vector3(1.f, 1.f, 1.f));
+	Matrix44 mYaw;
+	
+/*
+	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
+	if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
+	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
+	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
+*/
+
+	//TODO: move to playStage update
+	if (Input::isKeyPressed(SDL_SCANCODE_T)) {
+
+		// get mouse position
+		Vector2 mouse_pos = Input::mouse_position; 
+		Vector3 ray_origin = camera->eye;
+
+		Vector3 ray_direction = camera->getRayDirection(mouse_pos.x, mouse_pos.y, Game::instance->window_width, Game::instance->window_height );
+		
+		// Fill collision vector
+		std::vector<Vector3> collisions;
+
+		for (Entity* s : World::instance->root->children) 
+		{
+			EntityCollider* collider = dynamic_cast<EntityCollider*>(s);
+			if (!collider) continue;
+
+			Vector3 collision_point;
+			Vector3 collision_normal;
+			if (collider->mesh->testRayCollision(collider->model, ray_origin, ray_direction, collision_point, collision_normal))
+			{
+				collisions.push_back(collision_point);
+
+			}
+
+		}
+
+		//TODO: do something with the collisions found
+	
+	}
+
+
 }
 
 
