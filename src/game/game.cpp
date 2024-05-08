@@ -68,6 +68,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	
 	landscape_cubemap.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/cubemap.fs");
 	landscape_cubemap.diffuse = new Texture();
+	//TODO: buscar pngs 
 	landscape_cubemap.diffuse->loadCubemap("landscape", {
 	"data/negx.png",
 	"data/negy.png",
@@ -98,10 +99,10 @@ void Game::render(void)
 	// Set the camera as default
 	World::instance->camera->enable();
 	
-	// glDisable(GL_DEPTH_TEST);
-	// cube->material.shader->setUniform("u_camera_pos", World::instance->camera->eye);
-	// cube->render();
-	// glEnable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST);
+	cube->model.setTranslation(camera->eye),
+	cube->render();
+	glEnable(GL_DEPTH_TEST);
 	
 
 	// Set flags

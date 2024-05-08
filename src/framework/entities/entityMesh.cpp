@@ -38,6 +38,8 @@ void EntityMesh::render()
 
 	material.shader->setUniform("u_color", material.color);
 	material.shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
+	material.shader->setUniform("u_camera_pos", World::instance->camera->eye);
+
 
 	if (material.diffuse)
 		material.shader->setUniform("u_texture", material.diffuse, 0); //TODO: change the 0 when necessary
