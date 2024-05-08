@@ -1,13 +1,16 @@
 #pragma once
 
 #include "entityMesh.h"
+ 
 
 
 class EntityPlayer : public EntityMesh
 {
 public:
-	void render();
-	void update(float elapsed_time);
+	EntityPlayer();
+	//void render(Camera* camera) override;
+	void update(float elapsed_time) override;
 	float velocity;
+	Vector3 position;
 
 };

@@ -1,18 +1,45 @@
 #include "world.h"
 #include "framework/includes.h"
+#include "framework/camera.h"
 #include "framework/entities/entityMesh.h"
+#include "framework/entities/entityPlayer.h"
+
 #include "graphics/mesh.h"
 #include "graphics/shader.h"
 #include "graphics/texture.h"
+#include "game/game.h"
 #include <fstream> 
 
 
-World::World(Camera* camera, Entity* root) 
+World::World() 
 {
-	this->camera = camera;
-	this->root = root;
+	Camera* camera = Camera::current;
+	//camera = new Camera();
+	// Create our camera
+	//this->root = root;
 
+
+	Material landscape_cubemap;
+	landscape_cubemap.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/cubemap.fs");
+	landscape_cubemap.diffuse = new Texture();
+	//TODO: buscar pngs 
+	landscape_cubemap.diffuse->loadCubemap("landscape", {
+	"data/px.png",
+	"data/nx.png",
+	"data/ny.png",
+	"data/py.png",
+	"data/pz.png",
+	"data/nz.png"
+		});
+
+	skybox = new EntityMesh(Mesh::Get("data/meshes/cubemap.ASE"), landscape_cubemap, "");
+	player = new EntityPlayer();
 	
+	
+	camera->setPerspective(70.f, Game::instance->window_width / (float)Game::instance->window_height, 0.1f, 1000.f); //set the projection, we want to be perspective
+	//camera->lookAt(Vector3(0.f, 10.f, 10.f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
+	
+	//camera->rotate(180.f, camera->up);
 	/*landscape_cubemap.diffuse->loadCubemap("landscape", {
 		"data/textures/skybox/right.png",
 		"data/textures/skybox/left.png",
@@ -34,7 +61,7 @@ void World::update(double deltaTime) {
 
 }*/
 
-bool World::parseScene(const char* filename) 
+bool World::parseScene(const char* filename, EntityMesh* root)
 {
 	std::cout << " + Scene loading: " << filename << "..." << std::endl;
 
@@ -87,6 +114,7 @@ bool World::parseScene(const char* filename)
 		size_t tag = data.first.find("@tag");
 
 		if (tag != std::string::npos) {
+			//TODO: add asterodis for marker found with probability x
 			Mesh* mesh = Mesh::Get("...");
 			// Create a different type of entity
 			// new_entity = new ...

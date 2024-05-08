@@ -11,6 +11,7 @@
 #include "graphics/material.h"
 
 class Stage;
+class PlayStage;
 
 class Game
 {
@@ -34,6 +35,10 @@ public:
 	bool mouse_locked; //tells if the mouse is locked (not seen)
 
 	Game( int window_width, int window_height, SDL_Window* window );
+
+	Stage* current_stage = nullptr;
+	PlayStage* play_stage = nullptr;
+	//std::map<int, Stage*> stages;
 
 	//main functions
 	void render( void );

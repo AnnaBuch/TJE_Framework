@@ -7,13 +7,13 @@
 
 
 
-void EntityMesh::render()
+void EntityMesh::render(Camera* camera)
 {
 
 	if (!mesh) return;
 
 	// Get the last camera that was activated 
-	Camera* camera = World::instance->camera;
+	//Camera* camera = World::instance->camera;
 
 	//optimization class->draw only if it is being seen
 	Vector3 center_world = model * mesh->box.center;
@@ -38,7 +38,7 @@ void EntityMesh::render()
 
 	material.shader->setUniform("u_color", material.color);
 	material.shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-	material.shader->setUniform("u_camera_pos", World::instance->camera->eye);
+	material.shader->setUniform("u_camera_pos", camera->eye);
 
 
 	if (material.diffuse)

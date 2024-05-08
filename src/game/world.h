@@ -6,6 +6,8 @@
 #include <map>
 
 class Entity;
+class EntityMesh;
+class EntityPlayer;
 class Camera;
 
 class World {
@@ -14,15 +16,16 @@ public:
 	
 	Entity* root = nullptr;
 	std::map<std::string, sRenderData> meshes_to_load;
-	Camera* camera = nullptr;
+
+	EntityMesh* skybox = nullptr;
 
 	float sphere_radius;
 	float sphere_ground_radius;
-	//EntityPlayer* player = nullptr; //TODO: implement player calss
+	EntityPlayer* player = nullptr; 
 
-	World(Camera* camera, Entity* root);
+	World();
 	//void render();
 
 	//void update(double deltaTime);
-	bool parseScene(const char* filename);
+	bool parseScene(const char* filename, EntityMesh* root);
 };
