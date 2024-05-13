@@ -9,6 +9,17 @@
 #include "framework/utils.h"
 #include "framework/entities/entity.h"
 #include "graphics/material.h"
+#include "graphics/mesh.h"
+#include "graphics/texture.h"
+#include "graphics/fbo.h"
+#include "graphics/shader.h"
+#include "framework/input.h"
+#include "world.h"
+#include "framework/entities/entityMesh.h"
+#include "framework/entities/entityPlayer.h"
+#include "framework/entities/entityCollider.h"
+#include "game/stages/stage.h"
+
 
 class Stage;
 class PlayStage;

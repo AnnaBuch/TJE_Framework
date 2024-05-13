@@ -5,8 +5,13 @@
 #include <algorithm>
 #include "game/world.h"
 
-
-
+/* Canvi a entiny mesh
+void EntityMesh::Init(Mesh* mesh, Texture* texture, Shader* shader) {
+	this->mesh = mesh;
+	this->texture = texture;
+	this->shader = shader;
+}
+*/
 void EntityMesh::render(Camera* camera)
 {
 

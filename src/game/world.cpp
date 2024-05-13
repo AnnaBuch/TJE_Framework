@@ -115,9 +115,15 @@ bool World::parseScene(const char* filename, EntityMesh* root)
 
 		if (tag != std::string::npos) {
 			//TODO: add asterodis for marker found with probability x
-			Mesh* mesh = Mesh::Get("...");
+			EntityMesh* new_entity = new EntityMesh();
+			/* No fk clue NGL
+			new_entity->Init(Mesh::Get(mesh_name.c_str())
 			// Create a different type of entity
-			// new_entity = new ...
+			new_entity->isInstanced = true;
+			new_entity->models = render_data.models;
+			// Add entity to scene root
+			addChild.push_back(new_entity);
+			*/
 		}
 		else {
 			Mesh* mesh = Mesh::Get(mesh_name.c_str());
