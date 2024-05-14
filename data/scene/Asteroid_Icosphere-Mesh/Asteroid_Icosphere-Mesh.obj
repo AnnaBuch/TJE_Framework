@@ -1,7 +1,7 @@
 # Blender 4.1.1
 # www.blender.org
 mtllib Asteroid_Icosphere-Mesh.mtl
-o Asteroid_Icosphere.161
+o @asteroid.043
 v -0.001342 -0.720798 -0.000455
 v 0.324435 -0.650502 0.239074
 v -0.134630 -0.705037 0.414401

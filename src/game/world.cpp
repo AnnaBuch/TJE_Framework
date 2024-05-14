@@ -111,7 +111,7 @@ bool World::parseScene(const char* filename, EntityMesh* root)
 		Material mat = render_data.material;
 		EntityMesh* new_entity = nullptr;
 
-		size_t tag = data.first.find("@tag");
+		size_t tag = data.first.find("@asteroid");
 
 		if (tag != std::string::npos) {
 			//TODO: add asterodis for marker found with probability x
