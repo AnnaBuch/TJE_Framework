@@ -153,3 +153,37 @@ bool World::parseScene(const char* filename, EntityMesh* root)
 	std::cout << "Scene [OK]" << " Meshes added: " << mesh_count << std::endl;
 	return true;
 }
+
+/*
+sCollisionData World::rayCast() {
+	sCollisionData data;
+
+	for (auto e : root.children)
+	{
+		EntityCollider* ec = dynamic_cast<EntityCollider*> (e);
+		if (ec == nullptr || !(ec->getLayer())) {
+			continue;
+		}
+		Vector3 col_point;
+		Vector3 col_normal;
+
+		if (!ec->mesh->testRayCollision(ec->model, origin, direction, col_point, col_normal, max_ray_dist)) {
+			continue;
+		}
+
+		data.collided = true;
+
+		// There was a collision! Update if nearest. Float new distance (col peint erigin).length();
+
+		float new_distance = (col_point - origin).length();
+		if (new distance data distance) {
+			data.col_point = col_point; 
+			data.col_normal  = col_normal;
+			data.distance = new_distance;
+			data.colliderec = ec;
+		}
+	}
+	
+	return data;
+}
+*/
