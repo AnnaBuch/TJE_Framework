@@ -21,11 +21,14 @@ void EntityMesh::render(Camera* camera)
 	//Camera* camera = World::instance->camera;
 
 	//optimization class->draw only if it is being seen
-	Vector3 center_world = model * mesh->box.center;
-	float abb_radius = mesh->box.halfsize.length();
-	if (!camera->testSphereInFrustum(center_world, abb_radius)) {
-		return;
+	if (!isInstanced) {
+		Vector3 center_world = model * mesh->box.center;
+		float abb_radius = mesh->box.halfsize.length();
+		if (!camera->testSphereInFrustum(center_world, abb_radius)) {
+			return;
+		}
 	}
+	//TODO: si hi ha problemes de rendiment fer frustrum amb instancing 
 
 
 	glDisable(GL_BLEND);
@@ -34,7 +37,7 @@ void EntityMesh::render(Camera* camera)
 
 
 	if (!material.shader) {
-		material.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");//Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs");
+		material.shader = Shader::Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs" , "data/shaders/texture.fs");
 	}
 
 	

@@ -109,6 +109,8 @@ bool World::parseScene(const char* filename, EntityMesh* root)
 
 
 		Material mat = render_data.material;
+		
+
 		EntityMesh* new_entity = nullptr;
 
 		size_t tag = data.first.find("@asteroid");
@@ -127,6 +129,7 @@ bool World::parseScene(const char* filename, EntityMesh* root)
 		}
 		else {
 			Mesh* mesh = Mesh::Get(mesh_name.c_str());
+			
 			new_entity = new EntityMesh(mesh, mat);
 		}
 

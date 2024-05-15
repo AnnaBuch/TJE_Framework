@@ -2,8 +2,10 @@
 #include "framework/camera.h"
 #include "framework/includes.h"
 #include "game/world.h"
+#include "game/game.h"
 #include "framework/entities/EntityMesh.h"
 #include "framework/entities/EntityPlayer.h"
+
 #include <framework/input.h>
 
 void PlayStage::render() 
@@ -17,7 +19,7 @@ void PlayStage::render()
 
 
 
-	Camera::current->enable();
+	camera->enable();
 	glDisable(GL_DEPTH_TEST);
 	World::instance->skybox->model.setTranslation(camera->eye);
 	World::instance->skybox->render(camera);
@@ -28,6 +30,7 @@ void PlayStage::render()
 	//glDisable(GL_BLEND);
 	//glEnable(GL_DEPTH_TEST);
 	//glDisable(GL_CULL_FACE);
+	scene_root->Entity::render(camera);
 	World::instance->player->render(camera);
 
 }
@@ -35,11 +38,16 @@ void PlayStage::render()
 void PlayStage::update(double deltaTime) {
 
 	Camera* camera = Camera::current;
-	World::instance->player->update(deltaTime);
-	Vector3 eye = World::instance->player->model * Vector3(0.f, 6.f, -15.f);
-	Vector3 center = World::instance->player->model * Vector3(0.f, 0.f, 200.f);
-	Vector3 up = World::instance->player->model.rotateVector(Vector3(0, 1, 0));
+	EntityPlayer* player = World::instance->player;
 
-	camera->lookAt(eye, center, up);
+	player->update(deltaTime);
+	if (!Game::instance->free_cam) {
+		Vector3 eye = player->model * Vector3(0.f, 6.f, -15.f);
+		Vector3 center =player->model * Vector3(0.f, 0.f, 200.f);
+		Vector3 up = player->model.rotateVector(Vector3(0, 1, 0));
 
+		camera->lookAt(eye, center, up);
+
+
+	}
 }

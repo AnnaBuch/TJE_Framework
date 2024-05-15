@@ -17,7 +17,7 @@ EntityPlayer::EntityPlayer()
 	material.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	material.diffuse = Texture::Get("data/textures/texture.tga");
 	mesh = Mesh::Get("data/meshes/spaceship.obj");
-	velocity = 50.f;
+	velocity = 0.f;//50.f;
 }
 
 /*

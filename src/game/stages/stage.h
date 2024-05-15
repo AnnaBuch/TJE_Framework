@@ -1,5 +1,5 @@
 #pragma once
-
+#include "framework/entities/entityMesh.h"
 
 enum eStages {
     UNDEFINED,
@@ -30,6 +30,8 @@ class IntroStage: public Stage {
 class PlayStage : public Stage {
     eStages type = PLAY_STAGE;
 public:
+    EntityMesh* scene_root = nullptr;
+
     void render() override;
     void update(double deltaTime) override;
 

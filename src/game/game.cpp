@@ -15,7 +15,6 @@
 #include <cmath>
 
 
-bool free_cam = false;
 
 float angle = 0;
 float mouse_speed = 100.0f;
@@ -46,9 +45,10 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	play_stage = new PlayStage();
 	current_stage = dynamic_cast<Stage*>(play_stage);
-	
+	play_stage->scene_root = new EntityMesh(new Mesh(), Material(), "");
+
 	//PARSE SCENE HERE
-	//bool senecCheck = World::instance->parseScene("data/myscene.scene");
+	bool senecCheck = World::instance->parseScene("data/myscene.scene", play_stage->scene_root);
 
 	// Hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
