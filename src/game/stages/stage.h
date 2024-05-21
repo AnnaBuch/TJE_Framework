@@ -30,8 +30,9 @@ class IntroStage: public Stage {
 class PlayStage : public Stage {
     eStages type = PLAY_STAGE;
 public:
-    EntityMesh* scene_root = nullptr;
-
+    std::vector<EntityMesh*> scene_roots;
+    float forward_distance = 0.f;
+    float last_forward_added = 100.f;
     void render() override;
     void update(double deltaTime) override;
 

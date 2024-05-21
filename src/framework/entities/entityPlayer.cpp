@@ -17,7 +17,7 @@ EntityPlayer::EntityPlayer()
 	material.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	material.diffuse = Texture::Get("data/textures/texture.tga");
 	mesh = Mesh::Get("data/meshes/spaceship.obj");
-	velocity = 0.f;//50.f;
+	velocity = 20.f;
 }
 
 /*
@@ -67,21 +67,27 @@ void EntityPlayer::update(float deltaTime)
 
 	Vector3 position = model.getTranslation();
 	Vector3 move = Vector3(0.f, 0.f, 1.f);
-	//TODO: Player move
+
 	if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) move.y = 1.f;
 	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) move.y = -1.f;
-	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) move.x = 1.f;
-	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) move.x = -1.f;
+	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) {
+		move.x = 1.f;
+	}
+	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) {
+		move.x = -1.f;
+
+	}
 	//TODO: try smooth spaeceship movement, aka: rebot 
-	//move = Vector3(0.f, 0.f, velocity);
 	move.normalize();
 	move *= velocity * deltaTime;
 	model.translate(move);
+	
 
 	//TODO: Player collisions
 
 
 }
+
 
 
 

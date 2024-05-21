@@ -31,6 +31,8 @@ public:
 
 	std::vector<sMeshLOD> mesh_lods;
 
+	bool isAsteroid = false;
+
 	// Methods overwritten from base class
 	void render(Camera* camera) override;
 	void update(float elapsed_time) override;

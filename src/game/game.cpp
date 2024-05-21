@@ -45,11 +45,39 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	play_stage = new PlayStage();
 	current_stage = dynamic_cast<Stage*>(play_stage);
-	play_stage->scene_root = new EntityMesh(new Mesh(), Material(), "");
+	play_stage->scene_roots.push_back(new EntityMesh(new Mesh(), Material(), ""));
 
-	//PARSE SCENE HERE
-	bool senecCheck = World::instance->parseScene("data/myscene.scene", play_stage->scene_root);
+	EntityMesh* forward_root = new EntityMesh(new Mesh(), Material(), "");
+	forward_root->model.translate(0, 0, 50.f);
+	play_stage->scene_roots.push_back(forward_root);
 
+	EntityMesh* left_root = new EntityMesh(new Mesh(), Material(), "");
+	left_root->model.translate(25.f, 0, 0.f);
+	play_stage->scene_roots.push_back(left_root);
+
+	EntityMesh* right_root = new EntityMesh(new Mesh(), Material(), "");
+	right_root->model.translate(-25.f, 0, 0.f);
+	play_stage->scene_roots.push_back(right_root);
+
+	EntityMesh* top_root = new EntityMesh(new Mesh(), Material(), "");
+	top_root->model.translate(0.f, 20.f, 0.f);
+	play_stage->scene_roots.push_back(top_root);
+
+	EntityMesh* bottom_root = new EntityMesh(new Mesh(), Material(), "");
+	bottom_root->model.translate(0.f, -20.f, 0.f);
+	play_stage->scene_roots.push_back(bottom_root);
+
+	//PARSE SCENE HERE: n'estic carregant diverses en v`riese posicions: és un TEST
+	bool sceneCheck = World::instance->parseScene("data/myscene.scene", play_stage->scene_roots[0], 0.f);
+	sceneCheck = World::instance->parseScene("data/myscene.scene", forward_root, 0.f);
+	sceneCheck = World::instance->parseScene("data/myscene.scene", left_root, 0.f);
+	sceneCheck = World::instance->parseScene("data/myscene.scene", right_root, 0.f);
+	sceneCheck = World::instance->parseScene("data/myscene.scene", top_root, 0.f);
+	sceneCheck = World::instance->parseScene("data/myscene.scene", bottom_root, 0.f);
+
+
+
+	//play_stage->scene_root->children.push_back(forward_root);
 	// Hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 }

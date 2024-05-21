@@ -4,6 +4,7 @@
 #include "graphics/mesh.h"
 #include <algorithm>
 #include "game/world.h"
+#include "entityPlayer.h"
 
 /* Canvi a entiny mesh
 void EntityMesh::Init(Mesh* mesh, Texture* texture, Shader* shader) {
@@ -28,8 +29,8 @@ void EntityMesh::render(Camera* camera)
 			return;
 		}
 	}
-	//TODO: si hi ha problemes de rendiment fer frustrum amb instancing 
 
+	//TODO: si hi ha problemes de rendiment fer frustrum amb instancing 
 
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
@@ -69,8 +70,26 @@ void EntityMesh::render(Camera* camera)
 	
 	
 	//if not LOD used change final_mesh to mesh
-	if (isInstanced)
-		final_mesh->renderInstanced(GL_TRIANGLES, models.data(), models.size());
+	if (isInstanced) {
+		//Translate els meteorits utilitzant la global de la root que els conté
+		std::vector<Matrix44> new_models;
+		for (int i = 0; i < models.size(); ++i) {
+
+			Matrix44 new_mat = models[i] * getGlobalMatrix();
+			Vector3 asteroid_pos = new_mat.getTranslation();
+			Vector3 player_pos = World::instance->player->model.getTranslation();
+
+			//no renderitzar els asteroides per radere de l'avió
+			if (asteroid_pos.z < player_pos.z) {
+				continue;
+			}
+			new_models.push_back(models[i] * getGlobalMatrix());
+		}
+		final_mesh->renderInstanced(GL_TRIANGLES, new_models.data(), new_models.size()); 
+		if (!models.empty()) {
+		}
+
+	}
 	else
 		final_mesh->render(GL_TRIANGLES);
 		

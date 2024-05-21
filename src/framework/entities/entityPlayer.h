@@ -12,5 +12,6 @@ public:
 	void update(float elapsed_time) override;
 	float velocity;
 	Vector3 position;
+	float rotation = 0.f;
 
 };

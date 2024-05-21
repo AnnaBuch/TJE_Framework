@@ -27,5 +27,5 @@ public:
 	//void render();
 
 	//void update(double deltaTime);
-	bool parseScene(const char* filename, EntityMesh* root);
+	bool parseScene(const char* filename, EntityMesh* root, float translation);
 };

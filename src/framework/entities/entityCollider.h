@@ -27,6 +27,6 @@ public:
 
 	int layer = NONE;
 
-
-
+	bool checkPlayerCollisions(const Vector3& target_pos,
+		std::vector<sCollisionData>& collisions);
 };

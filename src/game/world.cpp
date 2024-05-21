@@ -35,7 +35,6 @@ World::World()
 	skybox = new EntityMesh(Mesh::Get("data/meshes/cubemap.ASE"), landscape_cubemap, "");
 	player = new EntityPlayer();
 
-
 	camera->setPerspective(70.f, Game::instance->window_width / (float)Game::instance->window_height, 0.1f, 1000.f); //set the projection, we want to be perspective
 	//camera->lookAt(Vector3(0.f, 10.f, 10.f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
 
@@ -50,7 +49,6 @@ World::World()
 		});*/
 
 
-
 }/*
 void World::render() {
 
@@ -61,8 +59,9 @@ void World::update(double deltaTime) {
 
 }*/
 
-bool World::parseScene(const char* filename, EntityMesh* root)
+bool World::parseScene(const char* filename, EntityMesh* root, float translation)
 {
+	
 	std::cout << " + Scene loading: " << filename << "..." << std::endl;
 
 	std::ifstream file(filename);
@@ -93,6 +92,7 @@ bool World::parseScene(const char* filename, EntityMesh* root)
 
 		// Add model to mesh list (might be instanced!)
 		sRenderData& render_data = meshes_to_load[mesh_name];
+		//model.translate(0.f, 0.f, translation);
 		render_data.models.push_back(model);
 		mesh_count++;
 	}
@@ -116,9 +116,9 @@ bool World::parseScene(const char* filename, EntityMesh* root)
 		size_t tag = data.first.find("@asteroid");
 
 		Mesh* mesh = Mesh::Get(mesh_name.c_str());
-
+		
 		new_entity = new EntityMesh(mesh, mat);
-
+		
 		//generate a random number between 0 and 1
 		
 		new_entity->name = data.first;
@@ -131,7 +131,7 @@ bool World::parseScene(const char* filename, EntityMesh* root)
 			for (int i = 0; i < render_data.models.size(); i++) {
 				//if the random number is greater than 0.5, add the model
 				float rand_value = random();
-				if (rand_value > 0.5) {
+				if (rand_value > 0.6) {
 					new_entity->addInstance(render_data.models[i]);
 				}
 				else {
@@ -144,6 +144,7 @@ bool World::parseScene(const char* filename, EntityMesh* root)
 			new_entity->model = render_data.models[0];
 		}
 
+		new_entity->isAsteroid = true;
 		// Add entity to scene root
 		root->addChild(new_entity);
 	}
