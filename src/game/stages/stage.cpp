@@ -64,12 +64,7 @@ void PlayStage::update(double deltaTime) {
 			//aqui estic intentant 
 			delete Game::instance->play_stage->scene_roots.front();
 			Game::instance->play_stage->scene_roots.erase(Game::instance->play_stage->scene_roots.begin());
-		}
-		
-
-		
-
-		
+		}	
 
 	}
 }
