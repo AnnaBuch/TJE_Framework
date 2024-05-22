@@ -2,12 +2,11 @@
 # www.blender.org
 
 newmtl Asteroid
+Ns 3.841536
 Ka 1.000000 1.000000 1.000000
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Kd output-onlinepngtools.png
-map_Ns rock_boulder_dry_rough_4k.exr
-map_Bump -bm 1.000000 rock_boulder_dry_nor_gl_4k.exr
+map_Kd resize asteroid.png
