@@ -52,19 +52,19 @@ void PlayStage::update(double deltaTime) {
 		camera->lookAt(eye, center, up);
 	}
 	forward_distance += player->velocity * deltaTime;
-	if (int(forward_distance) % 30 == 0) {
-		last_forward_added += 50.f; //més o menys per on anem -> on s'ha de carregar la nova escena
+	if (last_forward_added - forward_distance < 1) {
+		last_forward_added += 100.f; //més o menys per on anem -> on s'ha de carregar la nova escena
 		EntityMesh* forward_root = new EntityMesh(new Mesh(), Material(), "");
 		forward_root->model.translate(0, 0, last_forward_added);
+		//Game::instance->play_stage->scene_roots[0]->model = forward_root->model;
 		bool sceneCheck = World::instance->parseScene("data/myscene.scene", forward_root, 0.f);
-		Game::instance->play_stage->scene_roots.push_back(forward_root);
-		//La meva idea: no tenir mes de 7 escenes carreageds, quan es el cas -> eliminar la mes antiga-> no acaba de funcionar, 
-		//si es treu aixo, funciona, pero els FPS baixen molt!
-		if (Game::instance->play_stage->scene_roots.size() > 7) {
-			//aqui estic intentant 
-			delete Game::instance->play_stage->scene_roots.front();
+		if (Game::instance->play_stage->scene_roots.size() > 2) {
+
+			delete Game::instance->play_stage->scene_roots[0];
 			Game::instance->play_stage->scene_roots.erase(Game::instance->play_stage->scene_roots.begin());
-		}	
+		}
+		Game::instance->play_stage->scene_roots.push_back(forward_root);
+		
 
 	}
 }

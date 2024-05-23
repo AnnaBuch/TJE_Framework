@@ -32,7 +32,7 @@ class PlayStage : public Stage {
 public:
     std::vector<EntityMesh*> scene_roots;
     float forward_distance = 0.f;
-    float last_forward_added = 100.f;
+    float last_forward_added = 80.f;
     void render() override;
     void update(double deltaTime) override;
 

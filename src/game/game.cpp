@@ -70,10 +70,10 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//PARSE SCENE HERE: n'estic carregant diverses en v`riese posicions: és un TEST
 	bool sceneCheck = World::instance->parseScene("data/myscene.scene", play_stage->scene_roots[0], 0.f);
 	sceneCheck = World::instance->parseScene("data/myscene.scene", forward_root, 0.f);
-	sceneCheck = World::instance->parseScene("data/myscene.scene", left_root, 0.f);
+	/*sceneCheck = World::instance->parseScene("data/myscene.scene", left_root, 0.f);
 	sceneCheck = World::instance->parseScene("data/myscene.scene", right_root, 0.f);
 	sceneCheck = World::instance->parseScene("data/myscene.scene", top_root, 0.f);
-	sceneCheck = World::instance->parseScene("data/myscene.scene", bottom_root, 0.f);
+	sceneCheck = World::instance->parseScene("data/myscene.scene", bottom_root, 0.f);*/
 
 
 
