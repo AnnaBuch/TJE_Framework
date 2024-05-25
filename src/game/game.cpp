@@ -46,34 +46,10 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	play_stage = new PlayStage();
 	current_stage = dynamic_cast<Stage*>(play_stage);
 	play_stage->scene_roots.push_back(new EntityMesh(new Mesh(), Material(), ""));
-
-	EntityMesh* forward_root = new EntityMesh(new Mesh(), Material(), "");
-	forward_root->model.translate(0, 0, 50.f);
-	play_stage->scene_roots.push_back(forward_root);
-
-	EntityMesh* left_root = new EntityMesh(new Mesh(), Material(), "");
-	left_root->model.translate(25.f, 0, 0.f);
-	play_stage->scene_roots.push_back(left_root);
-
-	EntityMesh* right_root = new EntityMesh(new Mesh(), Material(), "");
-	right_root->model.translate(-25.f, 0, 0.f);
-	play_stage->scene_roots.push_back(right_root);
-
-	EntityMesh* top_root = new EntityMesh(new Mesh(), Material(), "");
-	top_root->model.translate(0.f, 20.f, 0.f);
-	play_stage->scene_roots.push_back(top_root);
-
-	EntityMesh* bottom_root = new EntityMesh(new Mesh(), Material(), "");
-	bottom_root->model.translate(0.f, -20.f, 0.f);
-	play_stage->scene_roots.push_back(bottom_root);
+	play_stage->scene_roots[0]->model.translate(0, 0, 100.f);
 
 	//PARSE SCENE HERE: n'estic carregant diverses en v`riese posicions: és un TEST
 	bool sceneCheck = World::instance->parseScene("data/myscene.scene", play_stage->scene_roots[0], 0.f);
-	sceneCheck = World::instance->parseScene("data/myscene.scene", forward_root, 0.f);
-	/*sceneCheck = World::instance->parseScene("data/myscene.scene", left_root, 0.f);
-	sceneCheck = World::instance->parseScene("data/myscene.scene", right_root, 0.f);
-	sceneCheck = World::instance->parseScene("data/myscene.scene", top_root, 0.f);
-	sceneCheck = World::instance->parseScene("data/myscene.scene", bottom_root, 0.f);*/
 
 
 
@@ -150,28 +126,43 @@ void Game::update(double seconds_elapsed)
 		Vector2 mouse_pos = Input::mouse_position; 
 		Vector3 ray_origin = camera->eye;
 
+		std::cout << "Mouse position: " << mouse_pos.x << ", " << mouse_pos.y << std::endl;
+		std::cout << "Ray origin: " << ray_origin.x << ", " << ray_origin.y << ", " << ray_origin.z << std::endl;
+
+
 		Vector3 ray_direction = camera->getRayDirection(mouse_pos.x, mouse_pos.y, Game::instance->window_width, Game::instance->window_height );
-		
+		std::cout << "Ray direction: " << ray_direction.x << ", " << ray_direction.y << ", " << ray_direction.z << std::endl;
+
 		// Fill collision vector
 		std::vector<Vector3> collisions;
-
-		for (Entity* s : World::instance->root->children) 
-		{
-			EntityCollider* collider = dynamic_cast<EntityCollider*>(s);
-			if (!collider) continue;
-
-			Vector3 collision_point;
-			Vector3 collision_normal;
-			if (collider->mesh->testRayCollision(collider->model, ray_origin, ray_direction, collision_point, collision_normal))
+		for (EntityMesh* sr : play_stage->scene_roots) {
+			if (!sr) {
+				std::cerr << "Scene root is null" << std::endl;
+				continue;
+			}
+			for (Entity* s : sr->children) 
 			{
-				collisions.push_back(collision_point);
+
+				EntityMesh* collider = dynamic_cast<EntityMesh*>(s);
+				if (!collider) continue;
+				for (const Matrix44  model : collider->models) {
+					Vector3 collision_point;
+					Vector3 collision_normal;
+					if (collider->mesh->testRayCollision(model, ray_origin, ray_direction, collision_point, collision_normal, 1000.f))
+					{
+						collisions.push_back(collision_point);
+
+					}
+
+				}
 
 			}
 
 		}
 
 		//TODO: do something with the collisions found
-	
+		std::cout << "collisions: " << collisions.size() << std::endl;
+
 	}
 
 

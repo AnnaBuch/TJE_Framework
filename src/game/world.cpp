@@ -64,6 +64,8 @@ bool World::parseScene(const char* filename, EntityMesh* root, float translation
 	
 	std::cout << " + Scene loading: " << filename << "..." << std::endl;
 
+	meshes_to_load.clear();
+
 	std::ifstream file(filename);
 
 	if (!file.good()) {
@@ -131,7 +133,7 @@ bool World::parseScene(const char* filename, EntityMesh* root, float translation
 			for (int i = 0; i < render_data.models.size(); i++) {
 				//if the random number is greater than 0.5, add the model
 				float rand_value = random();
-				if (rand_value > 0.6) {
+				if (rand_value > 0.3) {
 					new_entity->addInstance(render_data.models[i]);
 				}
 				else {
