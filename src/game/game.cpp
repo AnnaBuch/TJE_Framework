@@ -17,7 +17,8 @@
 
 
 float angle = 0;
-float mouse_speed = 100.0f;
+float mouse_speed = 100.0f;;
+EntityMesh* missil;
 
 Game* Game::instance = NULL;
 World* World::instance = NULL;
@@ -48,12 +49,14 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	play_stage->scene_roots.push_back(new EntityMesh(new Mesh(), Material(), ""));
 	play_stage->scene_roots[0]->model.translate(0, 0, 100.f);
 
-	//PARSE SCENE HERE: n'estic carregant diverses en v`riese posicions: és un TEST
 	bool sceneCheck = World::instance->parseScene("data/myscene.scene", play_stage->scene_roots[0], 0.f);
 
+	Material* mat = new Material();
+	mat->diffuse = Texture::Get("data/meshes/missil.tga");
+	mat->shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	Mesh* mesh = Mesh::Get("data/meshes/missil.ASE");
+	missil = new EntityMesh(mesh, *mat, "");
 
-
-	//play_stage->scene_root->children.push_back(forward_root);
 	// Hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 }
@@ -119,51 +122,6 @@ void Game::update(double seconds_elapsed)
 	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
 */
 
-	//TODO: move to playStage update
-	if (Input::isKeyPressed(SDL_SCANCODE_T)) {
-
-		// get mouse position
-		Vector2 mouse_pos = Input::mouse_position; 
-		Vector3 ray_origin = camera->eye;
-
-		std::cout << "Mouse position: " << mouse_pos.x << ", " << mouse_pos.y << std::endl;
-		std::cout << "Ray origin: " << ray_origin.x << ", " << ray_origin.y << ", " << ray_origin.z << std::endl;
-
-
-		Vector3 ray_direction = camera->getRayDirection(mouse_pos.x, mouse_pos.y, Game::instance->window_width, Game::instance->window_height );
-		std::cout << "Ray direction: " << ray_direction.x << ", " << ray_direction.y << ", " << ray_direction.z << std::endl;
-
-		// Fill collision vector
-		std::vector<Vector3> collisions;
-		for (EntityMesh* sr : play_stage->scene_roots) {
-			if (!sr) {
-				std::cerr << "Scene root is null" << std::endl;
-				continue;
-			}
-			for (Entity* s : sr->children) 
-			{
-
-				EntityMesh* collider = dynamic_cast<EntityMesh*>(s);
-				if (!collider) continue;
-				for (const Matrix44  model : collider->models) {
-					Vector3 collision_point;
-					Vector3 collision_normal;
-					if (collider->mesh->testRayCollision(model, ray_origin, ray_direction, collision_point, collision_normal, 1000.f))
-					{
-						collisions.push_back(collision_point);
-
-					}
-
-				}
-
-			}
-
-		}
-
-		//TODO: do something with the collisions found
-		std::cout << "collisions: " << collisions.size() << std::endl;
-
-	}
 
 
 }
@@ -187,11 +145,17 @@ void Game::onKeyUp(SDL_KeyboardEvent event)
 
 void Game::onMouseButtonDown( SDL_MouseButtonEvent event )
 {
+	current_stage->btnClick(event.button);
 	if (event.button == SDL_BUTTON_MIDDLE) //middle mouse
 	{
 		mouse_locked = !mouse_locked;
 		SDL_ShowCursor(!mouse_locked);
 		SDL_SetRelativeMouseMode((SDL_bool)(mouse_locked));
+	}
+
+	if (event.button == SDL_BUTTON_LEFT)
+	{
+		
 	}
 }
 

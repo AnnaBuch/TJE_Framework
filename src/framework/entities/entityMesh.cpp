@@ -80,14 +80,13 @@ void EntityMesh::render(Camera* camera)
 			Vector3 player_pos = World::instance->player->model.getTranslation();
 
 			//no renderitzar els asteroides per radere de l'avió
-			if (asteroid_pos.z < player_pos.z - 5.f) {
+			if (asteroid_pos.z < player_pos.z - 10.f) {
 				continue;
 			}
 			new_models.push_back(models[i] * getGlobalMatrix());
 		}
 		final_mesh->renderInstanced(GL_TRIANGLES, new_models.data(), new_models.size()); 
-		if (!models.empty()) {
-		}
+
 
 	}
 	else

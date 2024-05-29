@@ -1,6 +1,8 @@
 #pragma once
 #include "framework/entities/entityMesh.h"
 
+class EntityMissile;
+
 enum eStages {
     UNDEFINED,
     INTRO_STAGE,
@@ -19,6 +21,7 @@ public:
 
     virtual void onEnter() {};
     virtual void onExit() {};
+    virtual void btnClick(int btn) {};
 };
 
 class IntroStage: public Stage {
@@ -33,12 +36,15 @@ public:
     std::vector<EntityMesh*> scene_roots;
     float forward_distance = 0.f;
     float last_forward_added = 80.f;
+
+    std::vector<EntityMissile*> missiles;
+
     void render() override;
     void update(double deltaTime) override;
-
+    void btnClick(int btn) override;
+    
     void onEnter() {};
     void onExit() {};
-
 };
 
 class EndStage : public Stage {

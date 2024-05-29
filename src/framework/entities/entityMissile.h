@@ -4,18 +4,15 @@
  
 
 
-class EntityPlayer : public EntityMesh
+class EntityMissile : public EntityMesh
 {
 public:
-	EntityPlayer();
+	EntityMissile();
 	//void render(Camera* camera) override;
 	void update(float elapsed_time) override;
 	void render(Camera* camera) override;
-	float velocity;
-	Vector3 position;
-	float rotation = 0.f;
-
-	float sphere_radius = 10.f;
+	float velocity = 70.f;
+	
 
 
 };
