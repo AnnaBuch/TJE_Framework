@@ -51,11 +51,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	bool sceneCheck = World::instance->parseScene("data/myscene.scene", play_stage->scene_roots[0], 0.f);
 
-	Material* mat = new Material();
+	/*Material* mat = new Material();
 	mat->diffuse = Texture::Get("data/meshes/missil.tga");
 	mat->shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	Mesh* mesh = Mesh::Get("data/meshes/missil.ASE");
-	missil = new EntityMesh(mesh, *mat, "");
+	missil = new EntityMesh(mesh, *mat, "");*/
 
 	// Hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
