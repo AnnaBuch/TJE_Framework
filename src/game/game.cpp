@@ -45,20 +45,32 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	World::instance = new World();
 
 	play_stage = new PlayStage();
-	current_stage = dynamic_cast<Stage*>(play_stage);
 	play_stage->scene_roots.push_back(new EntityMesh(new Mesh(), Material(), ""));
 	play_stage->scene_roots[0]->model.translate(0, 0, 100.f);
 
 	bool sceneCheck = World::instance->parseScene("data/myscene.scene", play_stage->scene_roots[0], 0.f);
+	stages[PLAY_STAGE] = play_stage;
+	stages[END_STAGE] = new EndStage();
+	IntroStage* intro_stage = new IntroStage();
+	stages[INTRO_STAGE] = intro_stage;
+	current_stage = dynamic_cast<Stage*>(intro_stage);
 
-	/*Material* mat = new Material();
-	mat->diffuse = Texture::Get("data/meshes/missil.tga");
-	mat->shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-	Mesh* mesh = Mesh::Get("data/meshes/missil.ASE");
-	missil = new EntityMesh(mesh, *mat, "");*/
 
 	// Hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
+}
+
+void Game::goToStage(eStages new_stage)
+{
+	
+	Stage* stage = stages[new_stage];
+	if (current_stage) {
+		current_stage->onExit();
+
+		current_stage = stage;
+
+		current_stage->onEnter();
+	}
 }
 
 //what to do when the image has to be draw
@@ -72,10 +84,10 @@ void Game::render(void)
 
 	current_stage->render();
 	// Draw the floor grid
-	drawGrid();
+	//drawGrid();
 
 	// Render the FPS, Draw Calls, etc
-	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+	//drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 
 	// Swap between front buffer and back buffer
 	SDL_GL_SwapWindow(this->window);

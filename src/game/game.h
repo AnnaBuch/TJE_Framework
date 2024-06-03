@@ -50,12 +50,12 @@ public:
 
 	Stage* current_stage = nullptr;
 	PlayStage* play_stage = nullptr;
-	//std::map<int, Stage*> stages;
+	std::map<eStages, Stage*> stages;
 
 	//main functions
 	void render( void );
 	void update( double dt );
-
+	void goToStage(eStages stage);
 
 
 	//events

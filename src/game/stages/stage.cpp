@@ -5,19 +5,16 @@
 #include "game/game.h"
 #include "framework/entities/EntityMesh.h"
 #include "framework/entities/EntityPlayer.h"
+#include "framework/entities/entityMissile.h"
 
 #include <framework/input.h>
 
 void PlayStage::render() 
 {
+	EntityPlayer* player = World::instance->player;
 
 	// Set the camera as default
 	Camera* camera = Camera::current;
-
-	//TODO: set camera position at player
-
-
-
 
 	camera->enable();
 	glDisable(GL_DEPTH_TEST);
@@ -34,7 +31,15 @@ void PlayStage::render()
 		scene_roots[i]->Entity::render(camera);
 	}
 	//scene_root->Entity::render(camera);
-	World::instance->player->render(camera);
+	player->render(camera);
+	/*for (auto it = missiles.begin(); it != missiles.end(); ) {
+		it->first->render(camera);
+	}*/
+	for (EntityMissile* m : missiles) {
+		m->render(camera);
+	}
+	drawText(2, 2, "Health:" + std::to_string(player->health), Vector3(1, 1, 1), 2);
+
 
 }
 
@@ -44,6 +49,7 @@ void PlayStage::update(double deltaTime) {
 	EntityPlayer* player = World::instance->player;
 
 	player->update(deltaTime);
+
 	if (!Game::instance->free_cam) {
 		Vector3 eye = player->model * Vector3(0.f, 6.f, -15.f);
 		Vector3 center =player->model * Vector3(0.f, 0.f, 200.f);
@@ -51,6 +57,8 @@ void PlayStage::update(double deltaTime) {
 
 		camera->lookAt(eye, center, up);
 	}
+
+	//update scene
 	forward_distance += player->velocity * deltaTime;
 	if (last_forward_added - forward_distance < 0 ) {
 		last_forward_added += 90.f; //més o menys per on anem -> on s'ha de carregar la nova escena
@@ -65,56 +73,56 @@ void PlayStage::update(double deltaTime) {
 				Game::instance->play_stage->scene_roots.erase(Game::instance->play_stage->scene_roots.begin());
 			}
 		//}
-		
 
 	}
+
+	//Update missiles positions
+	for (auto it = missiles.begin(); it != missiles.end(); /* no increment here */) {
+		EntityMissile* m = *it;
+		if (m->collided || m->distance_run >= 50.f) {
+			delete m;
+			it = missiles.erase(it); 
+		}
+		else {
+			m->update(deltaTime);
+			++it; 
+		}
+	}
+	if (player->health <= 0) Game::instance->goToStage(END_STAGE);
 }
 
 void PlayStage::btnClick(int btn) {
 	if (btn == SDL_BUTTON_LEFT) 
 	{
-		Camera* camera = Camera::current;
-		// get mouse position
-		//Vector2 mouse_pos = Input::mouse_position;
-		Vector3 ray_origin = World::instance->player->model.getTranslation();
 
-		//Vector3 ray_direction = camera->getRayDirection(mouse_pos.x, mouse_pos.y, Game::instance->window_width, Game::instance->window_height);
-		Vector3 ray_direction = World::instance->player->model.frontVector().normalize();
-		bool collision_found = false;
+		//shoot
+		EntityPlayer* player = World::instance->player;
+		//if (!player->has_collided) {
+			EntityMissile* missile = new EntityMissile(player->model);
+			missiles.push_back(missile);
+		//}
+	}
+}
 
-		std::vector<Vector3> collisions;
-		for (EntityMesh* sr : scene_roots) {
-			if (!sr) {
-				std::cerr << "Scene root is null" << std::endl;
-				continue;
-			}
-			for (Entity* s : sr->children)
-			{
-				EntityMesh* collider = dynamic_cast<EntityMesh*>(s);
-				if (!collider) continue;
+void EndStage::render()
+{
+	drawText(10, 25, "End stage", Vector3(1, 1, 1), 6);
+}
 
-				for (auto it = collider->models.begin(); it != collider->models.end();)
-				{
-					Vector3 collision_point;
-					Vector3 collision_normal;
-					if (collision_found) break;
-					if (collider->mesh->testRayCollision(*it * collider->getGlobalMatrix(), ray_origin, ray_direction, collision_point, collision_normal, 500.f))
-					{
-						// Add the collision point to the list of collisions
-						//collisions.push_back(collision_point);
-						it = collider->models.erase(it);
-						collision_found = true;
-						break;
-					}
-					else ++it;
-				}
-				if (collision_found) break;
-			}
+void EndStage::update(double deltaTime)
+{
 
-		}
+}
 
-		//TODO: do something with the collisions found
-		//std::cout << "collisions: " << collisions.size() << std::endl;
+void IntroStage::render()
+{
+	drawText(10, 25, "Press SPACE to start", Vector3(1, 1, 1), 4);
+	
+}
 
+void IntroStage::update(double deltaTime)
+{
+	if (Input::isKeyPressed(SDL_SCANCODE_SPACE)) {
+		Game::instance->goToStage(PLAY_STAGE);
 	}
 }

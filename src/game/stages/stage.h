@@ -1,5 +1,6 @@
 #pragma once
 #include "framework/entities/entityMesh.h"
+#include <map>
 
 class EntityMissile;
 
@@ -26,8 +27,11 @@ public:
 
 class IntroStage: public Stage {
     eStages type = INTRO_STAGE;
-
-
+public:
+    void render() override;
+    void update(double deltaTime) override;
+    void onEnter() {};
+    void onExit() {};
 };
 
 class PlayStage : public Stage {
@@ -38,10 +42,12 @@ public:
     float last_forward_added = 80.f;
 
     std::vector<EntityMissile*> missiles;
+    //std::map<EntityMissile*, EntityMesh*> missiles;
 
     void render() override;
     void update(double deltaTime) override;
     void btnClick(int btn) override;
+    //EntityMissile* shoot();
     
     void onEnter() {};
     void onExit() {};
@@ -49,5 +55,9 @@ public:
 
 class EndStage : public Stage {
     eStages type = END_STAGE;
-
+public:
+    void render() override;
+    void update(double deltaTime) override;
+    void onEnter() {};
+    void onExit() {};
 };
