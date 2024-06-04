@@ -7,6 +7,8 @@
 #include "game/world.h"
 #include "game/game.h"
 #include <framework/input.h>
+#include "entityHealth.h"
+
 
 
 bool checkPlayerCollisions(const Vector3& target_pos) {
@@ -44,6 +46,24 @@ bool checkPlayerCollisions(const Vector3& target_pos) {
 		}
 	}
 	return collided;
+}
+
+void EntityPlayer::testHealthCollisions(const Vector3& target_pos) {
+	
+	for (auto it = Game::instance->play_stage->health.begin(); it != Game::instance->play_stage->health.end();) {
+		Vector3 colPoint;
+		Vector3 colNormal;
+		EntityHealth* h = *it;
+
+		if (h->mesh->testSphereCollision(h->model, target_pos + Vector3(0.f, 0.5f, 5.f), 1.f, colPoint, colNormal)) {
+			it = Game::instance->play_stage->health.erase(it);
+			if(health < 100)health += 5;
+			//TODO:add sound effect
+		}
+		else {
+			++it;
+		}
+	}
 }
 
 //TODO: delete before submission
@@ -150,6 +170,7 @@ void EntityPlayer::update(float deltaTime)
 	
 	move.normalize();
 	move *= velocity * deltaTime;
+
 	//model.rotate(toRotate * DEG2RAD, Vector3(0, 0, 1));
 	model.translate(move);
 	if (!has_collided && checkPlayerCollisions(model.getTranslation())) {
@@ -166,6 +187,7 @@ void EntityPlayer::update(float deltaTime)
 			collision_time = 0.f;
 		}
 	}
+	testHealthCollisions(model.getTranslation());
 	
 
 }

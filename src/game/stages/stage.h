@@ -3,6 +3,7 @@
 #include <map>
 
 class EntityMissile;
+class EntityHealth;
 
 enum eStages {
     UNDEFINED,
@@ -40,8 +41,10 @@ public:
     std::vector<EntityMesh*> scene_roots;
     float forward_distance = 0.f;
     float last_forward_added = 80.f;
-
+    int amo = 10;
+    float recharge_timer = 0.f;
     std::vector<EntityMissile*> missiles;
+    std::vector<EntityHealth*> health;
     //std::map<EntityMissile*, EntityMesh*> missiles;
 
     void render() override;

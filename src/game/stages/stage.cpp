@@ -6,6 +6,8 @@
 #include "framework/entities/EntityMesh.h"
 #include "framework/entities/EntityPlayer.h"
 #include "framework/entities/entityMissile.h"
+#include "framework/entities/entityHealth.h"
+
 
 #include <framework/input.h>
 
@@ -38,8 +40,12 @@ void PlayStage::render()
 	for (EntityMissile* m : missiles) {
 		m->render(camera);
 	}
+	for (EntityHealth* h : health) {
+		h->render(camera);
+	}
 	drawText(2, 2, "Health:" + std::to_string(player->health), Vector3(1, 1, 1), 2);
-
+	drawText(300, 2, "Amonition:" + std::to_string(amo), Vector3(1, 1, 1), 2);
+	if(recharge_timer != 0) drawText(500, 2, "Recharging amo...", Vector3(1, 1, 1), 2);
 
 }
 
@@ -89,18 +95,31 @@ void PlayStage::update(double deltaTime) {
 		}
 	}
 	if (player->health <= 0) Game::instance->goToStage(END_STAGE);
+	if (amo == 0) {
+		recharge_timer += deltaTime;
+	}
+	if (recharge_timer >= 3) {
+		amo = 10;
+		recharge_timer = 0.f;
+	}
+
+	for (EntityHealth* h : health) {
+		h->update(deltaTime);
+	}
 }
 
 void PlayStage::btnClick(int btn) {
 	if (btn == SDL_BUTTON_LEFT) 
 	{
+		if (amo > 0) {
 
-		//shoot
-		EntityPlayer* player = World::instance->player;
-		//if (!player->has_collided) {
+			EntityPlayer* player = World::instance->player;
+			//if (!player->has_collided) {
 			EntityMissile* missile = new EntityMissile(player->model);
 			missiles.push_back(missile);
-		//}
+			amo -= 1;
+		}
+		
 	}
 }
 
