@@ -6,7 +6,7 @@
 #include "game/game.h"
 #include "framework/camera.h"
 #include "framework/entities/entityHealth.h"
-
+#include "framework/audio.h"
 
 
 void EntityMissile::checkMissileCollisions(const Vector3& target_pos) {
@@ -26,7 +26,7 @@ void EntityMissile::checkMissileCollisions(const Vector3& target_pos) {
 				if (collider->mesh->testSphereCollision((*it) * collider->getGlobalMatrix(), target_pos + Vector3(0.f, 0.5f, 5.f), 1.f, colPoint, colNormal)) {
 					// DELETE ASTEROID: delete model from collider
 					float rand_value = random();
-					if (rand_value < 0.8) {
+					if (rand_value > 0.8) {
 						
 						EntityHealth* health = new EntityHealth(((*it) * collider->getGlobalMatrix()).getTranslation());
 						dynamic_cast<PlayStage*>(Game::instance->current_stage)->health.push_back(health);
@@ -34,6 +34,13 @@ void EntityMissile::checkMissileCollisions(const Vector3& target_pos) {
 					
 					it = collider->models.erase(it);
 					collided = true;
+					EntityPlayer* player = World::instance->player;
+					BASS_Set3DPosition(new BASS_3DVECTOR(target_pos.x, target_pos.y, target_pos.z), 
+									   new BASS_3DVECTOR(0,0,20.f),
+						               new BASS_3DVECTOR(player->model.frontVector().x, player->model.frontVector().y, player->model.frontVector().z),
+									   new BASS_3DVECTOR(player->model.topVector().x, player->model.topVector().y, player->model.topVector().z)
+										);
+					Audio::Play3D("data/audio/collision2.wav", colPoint);
 					//TODO: show fuel/power up
 				}
 				else {

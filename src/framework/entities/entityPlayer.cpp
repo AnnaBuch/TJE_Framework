@@ -8,7 +8,7 @@
 #include "game/game.h"
 #include <framework/input.h>
 #include "entityHealth.h"
-
+#include "framework/audio.h"
 
 
 bool checkPlayerCollisions(const Vector3& target_pos) {
@@ -36,6 +36,9 @@ bool checkPlayerCollisions(const Vector3& target_pos) {
 					
 					) {
 					collided = true;
+					Audio::Play("data/audio/damage.wav", 0.05f);
+
+					//Audio::Play3D("data/audio/damage.wav", colPoint);
 					it = collider->models.erase(it);
 				}
 				else {
@@ -55,9 +58,10 @@ void EntityPlayer::testHealthCollisions(const Vector3& target_pos) {
 		Vector3 colNormal;
 		EntityHealth* h = *it;
 
-		if (h->mesh->testSphereCollision(h->model, target_pos + Vector3(0.f, 0.5f, 5.f), 1.f, colPoint, colNormal)) {
+		if (h->mesh->testSphereCollision(h->model, target_pos, 1.f, colPoint, colNormal)) {
 			it = Game::instance->play_stage->health.erase(it);
 			if(health < 100)health += 5;
+			Audio::Play("data/audio/health.wav", 0.2f);
 			//TODO:add sound effect
 		}
 		else {
@@ -105,8 +109,8 @@ void EntityPlayer::render(Camera* camera)
 
 	//To debug, make spheres visible TODO: delete before submission
 	
-	/*renderSphere(camera, Vector3(0.f, 0.5f, 5.f), 1.f);
-	renderSphere(camera, Vector3(2.f, 0.5f, 2.f), 1.f);
+	renderSphere(camera, Vector3(0.f, 0.5f, 2.f), 1.f);
+	/*renderSphere(camera, Vector3(2.f, 0.5f, 2.f), 1.f);
 	renderSphere(camera, Vector3(-2.f, 0.5f, 2.f), 1.f);
 	renderSphere(camera, Vector3(0.f, 0.5f, -2.f), 2.f);
 	renderSphere(camera, Vector3(4.f, 0.5f, -1.f), 1.5f);
@@ -188,7 +192,9 @@ void EntityPlayer::update(float deltaTime)
 		}
 	}
 	testHealthCollisions(model.getTranslation());
-	
+	if (model.getTranslation().x > 25 || model.getTranslation().x < -25 || model.getTranslation().y > 25 || model.getTranslation().y < -25) {
+		health = 0;
+	}
 
 }
 

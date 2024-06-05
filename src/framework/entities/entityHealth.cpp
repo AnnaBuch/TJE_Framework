@@ -7,34 +7,7 @@
 #include "framework/camera.h"
 
 
-void EntityHealth::checkMissileCollisions(const Vector3& target_pos) {
 
-	for (EntityMesh* sr : Game::instance->play_stage->scene_roots) {
-		if (!sr) {
-			std::cerr << "Scene root is null" << std::endl;
-			continue;
-		}
-		for (Entity* s : sr->children)
-		{
-			EntityMesh* collider = dynamic_cast<EntityMesh*>(s);
-			if (!collider) continue;
-			for (auto it = collider->models.begin(); it != collider->models.end();) {
-				Vector3 colPoint;
-				Vector3 colNormal;
-				if (collider->mesh->testSphereCollision((*it) * collider->getGlobalMatrix(), target_pos + Vector3(0.f, 0.5f, 5.f), 1.f, colPoint, colNormal)) {
-					// DELETE ASTEROID: delete model from collider
-					it = collider->models.erase(it);
-					collided = true;
-					//TODO: show fuel/power up
-				}
-				else {
-					++it;
-				}
-			}
-		}
-	
-	}
-}
 
 //void EntityMissile::renderSphere(Camera* camera, Vector3 translation, float radius) {
 //	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/flat.fs");

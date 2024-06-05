@@ -14,6 +14,8 @@
 
 #include <cmath>
 
+#include "framework/audio.h"
+
 
 
 float angle = 0;
@@ -55,6 +57,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	stages[INTRO_STAGE] = intro_stage;
 	current_stage = dynamic_cast<Stage*>(intro_stage);
 
+	Audio::Init();
 
 	// Hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
