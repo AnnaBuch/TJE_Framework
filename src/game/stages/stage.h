@@ -4,6 +4,7 @@
 
 class EntityMissile;
 class EntityHealth;
+class EntityPower;
 
 enum eStages {
     UNDEFINED,
@@ -45,6 +46,7 @@ public:
     float recharge_timer = 0.f;
     std::vector<EntityMissile*> missiles;
     std::vector<EntityHealth*> health;
+    std::vector<EntityPower*> power;
     //std::map<EntityMissile*, EntityMesh*> missiles;
 
     void render() override;

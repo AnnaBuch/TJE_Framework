@@ -6,6 +6,7 @@
 #include "game/game.h"
 #include "framework/camera.h"
 #include "framework/entities/entityHealth.h"
+#include "framework/entities/entityPower.h"
 #include "framework/audio.h"
 
 
@@ -26,10 +27,22 @@ void EntityMissile::checkMissileCollisions(const Vector3& target_pos) {
 				if (collider->mesh->testSphereCollision((*it) * collider->getGlobalMatrix(), target_pos + Vector3(0.f, 0.5f, 5.f), 1.f, colPoint, colNormal)) {
 					// DELETE ASTEROID: delete model from collider
 					float rand_value = random();
-					if (rand_value > 0.8) {
+					if (rand_value > 0.5) {
+						rand_value = random();
+						if (rand_value > 0.8) {
 						
-						EntityHealth* health = new EntityHealth(((*it) * collider->getGlobalMatrix()).getTranslation());
-						dynamic_cast<PlayStage*>(Game::instance->current_stage)->health.push_back(health);
+							EntityHealth* health = new EntityHealth(((*it) * collider->getGlobalMatrix()).getTranslation());
+							dynamic_cast<PlayStage*>(Game::instance->current_stage)->health.push_back(health);
+						}
+					}
+					else {
+						rand_value = random();
+						if (rand_value > 0.8) {
+
+							EntityPower* power = new EntityPower(((*it) * collider->getGlobalMatrix()).getTranslation());
+							dynamic_cast<PlayStage*>(Game::instance->current_stage)->power.push_back(power);
+
+						}
 					}
 					
 					it = collider->models.erase(it);

@@ -1,4 +1,4 @@
-#include "entityHealth.h"
+#include "entityPower.h"
 #include "graphics/texture.h"
 #include "graphics/shader.h"
 #include "graphics/mesh.h"
@@ -8,53 +8,32 @@
 
 
 
-
-//void EntityMissile::renderSphere(Camera* camera, Vector3 translation, float radius) {
-//	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/flat.fs");
-//	Mesh* mesh = Mesh::Get("data/meshes/sphere.obj");
-//	Matrix44 m = model;
-//
-//	shader->enable();
-//	m.translate(translation);
-//	m.scale(radius, radius, radius);
-//
-//	shader->setUniform("u_color", Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-//	shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-//	shader->setUniform("u_model", m);
-//
-//	mesh->render(GL_LINES);
-//
-//	shader->disable();
-//
-//}
-
-
-EntityHealth::EntityHealth()
+EntityPower::EntityPower()
 {
 	material = Material();
-	material.diffuse = Texture::Get("data/meshes/FirstAid.png");
+	material.diffuse = Texture::Get("data/meshes/EC_Power_Cell_Color_Green.png");
 	material.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-	mesh = Mesh::Get("data/meshes/first_aid.obj");
+	mesh = Mesh::Get("data/meshes/power_cell.obj");
 }
 
-EntityHealth::EntityHealth(Vector3 position)
+EntityPower::EntityPower(Vector3 position)
 {
 	material = Material();
-	material.diffuse = Texture::Get("data/meshes/FirstAid.png");
+	material.diffuse = Texture::Get("data/meshes/EC_Power_Cell_Color_Green.png");
 	material.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-	mesh = Mesh::Get("data/meshes/first_aid.obj");
+	mesh = Mesh::Get("data/meshes/power_cell.obj");
 
 	model.translate(position);
-	model.scale(5, 5, 5);
+	//model.scale(5, 5, 5);
 
 }
 
-void EntityHealth::update(float elapsed_time)
+void EntityPower::update(float elapsed_time)
 {
 	model.rotate(360 * DEG2RAD * elapsed_time, Vector3(0, 1, 0));
 }
 
-void EntityHealth::render(Camera* camera)
+void EntityPower::render(Camera* camera)
 {
 	//TODO:delete this: only for debugging
 	//renderSphere(camera, Vector3(0.f, 0.5f, 5.f), 1.f);

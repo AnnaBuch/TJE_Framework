@@ -8,6 +8,7 @@
 #include "game/game.h"
 #include <framework/input.h>
 #include "entityHealth.h"
+#include "entityPower.h"
 #include "framework/audio.h"
 
 
@@ -62,7 +63,24 @@ void EntityPlayer::testHealthCollisions(const Vector3& target_pos) {
 			it = Game::instance->play_stage->health.erase(it);
 			if(health < 100)health += 5;
 			Audio::Play("data/audio/health.wav", 0.2f);
-			//TODO:add sound effect
+		}
+		else {
+			++it;
+		}
+	}
+}
+
+void EntityPlayer::testPowerCollisions(const Vector3& target_pos) {
+
+	for (auto it = Game::instance->play_stage->power.begin(); it != Game::instance->play_stage->power.end();) {
+		Vector3 colPoint;
+		Vector3 colNormal;
+		EntityPower* p = *it;
+
+		if (p->mesh->testSphereCollision(p->model, target_pos, 1.f, colPoint, colNormal)) {
+			it = Game::instance->play_stage->power.erase(it);
+			//if (health < 100)health += 5;
+			Audio::Play("data/audio/health.wav", 0.2f);
 		}
 		else {
 			++it;
@@ -192,9 +210,12 @@ void EntityPlayer::update(float deltaTime)
 		}
 	}
 	testHealthCollisions(model.getTranslation());
+	testPowerCollisions(model.getTranslation());
 	if (model.getTranslation().x > 25 || model.getTranslation().x < -25 || model.getTranslation().y > 25 || model.getTranslation().y < -25) {
 		health = 0;
 	}
+	velocity = std::min(50.f, velocity + deltaTime / 3);
+	//velocity += deltaTime/3;
 
 }
 

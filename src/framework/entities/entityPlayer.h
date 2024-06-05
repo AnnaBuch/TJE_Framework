@@ -13,6 +13,8 @@ public:
 	void render(Camera* camera) override;
 	void renderSphere(Camera* camera, Vector3 translation, float radius); //TODO: delete before submitting
 	void testHealthCollisions(const Vector3& target_pos);
+	void testPowerCollisions(const Vector3& target_pos);
+
 	float velocity;
 	Vector3 position;
 	float rotation = 0.f;

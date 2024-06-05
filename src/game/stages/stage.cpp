@@ -7,6 +7,7 @@
 #include "framework/entities/EntityPlayer.h"
 #include "framework/entities/entityMissile.h"
 #include "framework/entities/entityHealth.h"
+#include "framework/entities/entityPower.h"
 
 
 #include <framework/input.h>
@@ -43,6 +44,9 @@ void PlayStage::render()
 	for (EntityHealth* h : health) {
 		h->render(camera);
 	}
+	for (EntityPower* p : power) {
+		p->render(camera);
+	}
 	drawText(2, 2, "Health:" + std::to_string(player->health), Vector3(1, 1, 1), 2);
 	drawText(300, 2, "Amonition:" + std::to_string(amo), Vector3(1, 1, 1), 2);
 	if(recharge_timer != 0) drawText(500, 2, "Recharging amo...", Vector3(1, 1, 1), 2);
@@ -57,7 +61,7 @@ void PlayStage::update(double deltaTime) {
 	player->update(deltaTime);
 
 	if (!Game::instance->free_cam) {
-		Vector3 eye = player->model * Vector3(0.f, 6.f, -15.f);
+		Vector3 eye = player->model * Vector3(0.f, 4.f, -15.f);
 		Vector3 center =player->model * Vector3(0.f, 0.f, 200.f);
 		Vector3 up = player->model.rotateVector(Vector3(0, 1, 0));
 
@@ -105,6 +109,9 @@ void PlayStage::update(double deltaTime) {
 
 	for (EntityHealth* h : health) {
 		h->update(deltaTime);
+	}
+	for (EntityPower* p : power) {
+		p->update(deltaTime);
 	}
 }
 
