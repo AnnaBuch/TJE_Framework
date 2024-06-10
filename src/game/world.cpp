@@ -36,6 +36,17 @@ World::World()
 	player = new EntityPlayer();
 
 	camera->setPerspective(70.f, Game::instance->window_width / (float)Game::instance->window_height, 0.1f, 1000.f); //set the projection, we want to be perspective
+
+
+	//Camera UI
+	camera2D = new Camera();
+	//camera2D->view_matrix.setIdentity();
+	camera2D->setOrthographic(0, window_width, window_height, 0, -1.f, 1.f);
+
+
+
+	//camera2D->rotate(PI/2, Vector3(0, 0, 1));
+	// 
 	//camera->lookAt(Vector3(0.f, 10.f, 10.f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
 
 	//camera->rotate(180.f, camera->up);
