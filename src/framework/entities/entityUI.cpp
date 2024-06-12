@@ -4,7 +4,7 @@
 #include "framework/input.h"
 #include "game/world.h"
 #include "game/game.h"
-#include "game/stage.h"
+#include "game/stages/stage.h"
 
 #include <iostream>
 #include <fstream>
@@ -22,7 +22,7 @@ EntityUI::EntityUI(Vector2 position, Vector2 size, const Material& material, eBu
 	this->material = material;
 	this->buttonId = buttonId;
 
-	quad.createQuad(position.x, position.y, size.x, size.y, true);
+	quad->createQuad(position.x, position.y, size.x, size.y, true);
 
 }
 
@@ -38,7 +38,7 @@ void EntityUI::render_energy(Camera* camera2d, float  current_energy_charged) {
 
 	material.shader->enable();
 
-	World* world = World::get_instance();
+	World* world = World::instance;
 	//Matrix44 viewProj = camera2d->viewprojection_matrix;
 
 	material.shader->setUniform("u_color", material.color);
@@ -48,7 +48,7 @@ void EntityUI::render_energy(Camera* camera2d, float  current_energy_charged) {
 
 	material.shader->setFloat("Energy_charged", current_energy_charged);
 
-	quad.render(GL_TRIANGLES);
+	quad->render(GL_TRIANGLES);
 
 	material.shader->disable();
 
@@ -76,7 +76,7 @@ void EntityUI::render_lifes(Camera* camera2d, int current_lifes) {
 
 	material.shader->enable();
 
-	World* world = World::get_instance();
+	World* world = World::instance;
 	//Matrix44 viewProj = camera2d->viewprojection_matrix;
 
 	material.shader->setUniform("u_color", material.color);
@@ -86,7 +86,7 @@ void EntityUI::render_lifes(Camera* camera2d, int current_lifes) {
 
 	material.shader->setInt("lifes", current_lifes);
 
-	quad.render(GL_TRIANGLES);
+	quad->render(GL_TRIANGLES);
 
 	material.shader->disable();
 
@@ -114,7 +114,7 @@ void EntityUI::render(Camera* camera2d) {
 
 	material.shader->enable();
 
-	World* world = World::get_instance();
+	World* world = World::instance;
 	//Matrix44 viewProj = camera2d->viewprojection_matrix;
 
 	material.shader->setUniform("u_color", material.color);
@@ -123,7 +123,7 @@ void EntityUI::render(Camera* camera2d) {
 	material.shader->setUniform("u_texture", material.diffuse, 0);
 
 
-	quad.render(GL_TRIANGLES);
+	quad->render(GL_TRIANGLES);
 
 	material.shader->disable();
 
@@ -151,19 +151,18 @@ void EntityUI::update(float seconds_elapsed) {
 		material.color = Vector4::RED;
 
 		if (Input::isMousePressed(SDL_BUTTON_LEFT)) {
-			World* world = World::get_instance();
-			world->current_stage->onButtonPressed(buttonId); //ONbUTTONPRESSED
+			//Game::instance->current_stage->onButtonPressed(buttonId); //ONbUTTONPRESSED
 		}
 	}
 	else if (buttonId == Energy_charged) {
-		material.color = Vector4::YELLOW;
-		float energy_charged = GamePlay::get_instance()->player->energy_charged;
+		//material.color = Vector4::YELLOW;
+		//float energy_charged = GamePlay::get_instance()->player->energy_charged;
 	}
 	else if (buttonId == Life) {
-		material.color = Vector4::RED;
+		//material.color = Vector4::RED;
 	}
 	else {
-		material.color = Vector4::WHITE;
+		//material.color = Vector4::WHITE;
 
 	}
 	Entity::update(seconds_elapsed);

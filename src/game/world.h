@@ -22,6 +22,7 @@ public:
 	float sphere_radius;
 	float sphere_ground_radius;
 	EntityPlayer* player = nullptr; 
+	Camera* camera2D = nullptr;
 
 	World();
 	//void render();

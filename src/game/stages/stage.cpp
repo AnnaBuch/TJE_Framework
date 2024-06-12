@@ -135,10 +135,10 @@ void PlayStage::btnClick(int btn) {
 void Menu::init() {
 	Game::instance->mouse_locked = false;
 	isEnded = false;
-	world_width = World::instance->window_width;
-	world_height = World::instance->window_height;
+	world_width = Game::instance->window_width;
+	world_height = Game::instance->window_height;
 
-	camera2d = World::instance()->camera2D;
+	camera2d = World::instance->camera2D;
 
 	Material background_mat;
 	background_mat.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");

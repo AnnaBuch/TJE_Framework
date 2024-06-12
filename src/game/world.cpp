@@ -41,7 +41,7 @@ World::World()
 	//Camera UI
 	camera2D = new Camera();
 	//camera2D->view_matrix.setIdentity();
-	camera2D->setOrthographic(0, window_width, window_height, 0, -1.f, 1.f);
+	camera2D->setOrthographic(0, Game::instance->window_width, Game::instance->window_height, 0, -1.f, 1.f);
 
 
 

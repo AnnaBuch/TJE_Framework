@@ -1,6 +1,7 @@
 #pragma once
 
 #include "framework/entities/entityMesh.h"
+class Mesh;
 
 enum eButtonId{
 	Undefined,
@@ -25,7 +26,7 @@ public:
 
 	Camera* camera2d;
 
-	Mesh quad;
+	Mesh* quad;
 
 	eButtonId buttonId;
 	Material material;

@@ -1,5 +1,6 @@
 #pragma once
 #include "framework/entities/entityMesh.h"
+#include "framework/entities/entityUI.h"
 #include <map>
 
 class EntityMissile;
