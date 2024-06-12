@@ -18,6 +18,6 @@ public:
 	float velocity = 100.f;
 	bool collided = false;
 	float distance_run = 0.f;
-	
+	bool expired = false;
 
 };

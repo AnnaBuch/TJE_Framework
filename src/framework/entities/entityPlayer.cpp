@@ -59,7 +59,13 @@ void EntityPlayer::testHealthCollisions(const Vector3& target_pos) {
 		Vector3 colNormal;
 		EntityHealth* h = *it;
 
-		if (h->mesh->testSphereCollision(h->model, target_pos, 1.f, colPoint, colNormal)) {
+		if (h->mesh->testSphereCollision(h->model, target_pos, 1.f, colPoint, colNormal)
+			/* || h->mesh->testSphereCollision(h->model, target_pos + Vector3(2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
+			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(-2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
+			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(0.f, 0.5f, -2.f), 2.f, colPoint, colNormal)
+			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)
+			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(-4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)*/
+			) {
 			it = Game::instance->play_stage->health.erase(it);
 			if(health < 100)health += 5;
 			Audio::Play("data/audio/health.wav", 0.2f);
@@ -77,7 +83,13 @@ void EntityPlayer::testPowerCollisions(const Vector3& target_pos) {
 		Vector3 colNormal;
 		EntityPower* p = *it;
 
-		if (p->mesh->testSphereCollision(p->model, target_pos, 1.f, colPoint, colNormal)) {
+		if (p->mesh->testSphereCollision(p->model, target_pos, 1.f, colPoint, colNormal)
+			/* || p->mesh->testSphereCollision(p->model, target_pos + Vector3(2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
+			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(-2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
+			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(0.f, 0.5f, -2.f), 2.f, colPoint, colNormal)
+			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)
+			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(-4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)*/
+			) {
 			it = Game::instance->play_stage->power.erase(it);
 			//if (health < 100)health += 5;
 			Audio::Play("data/audio/health.wav", 0.2f);
@@ -127,7 +139,7 @@ void EntityPlayer::render(Camera* camera)
 
 	//To debug, make spheres visible TODO: delete before submission
 	
-	renderSphere(camera, Vector3(0.f, 0.5f, 2.f), 1.f);
+	//renderSphere(camera, Vector3(0.f, 0.5f, 2.f), 1.f);
 	/*renderSphere(camera, Vector3(2.f, 0.5f, 2.f), 1.f);
 	renderSphere(camera, Vector3(-2.f, 0.5f, 2.f), 1.f);
 	renderSphere(camera, Vector3(0.f, 0.5f, -2.f), 2.f);

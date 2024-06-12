@@ -12,6 +12,13 @@
 
 #include <framework/input.h>
 
+#define MAX_BULLETS = 10;
+PlayStage::PlayStage()
+{
+	for (size_t i = 0; i < 10; ++i) {
+		missiles[i] = nullptr;  // Initialize all pointers to nullptr
+	}
+}
 void PlayStage::render() 
 {
 	EntityPlayer* player = World::instance->player;
@@ -38,9 +45,10 @@ void PlayStage::render()
 	/*for (auto it = missiles.begin(); it != missiles.end(); ) {
 		it->first->render(camera);
 	}*/
-	for (EntityMissile* m : missiles) {
-		m->render(camera);
+	for (int i = 0; i < missiles.size(); ++i) {
+		if (missiles[i] != nullptr && !missiles[i]->expired) missiles[i]->render(camera);
 	}
+
 	for (EntityHealth* h : health) {
 		h->render(camera);
 	}
@@ -87,17 +95,14 @@ void PlayStage::update(double deltaTime) {
 	}
 
 	//Update missiles positions
-	for (auto it = missiles.begin(); it != missiles.end(); /* no increment here */) {
-		EntityMissile* m = *it;
-		if (m->collided || m->distance_run >= 50.f) {
-			delete m;
-			it = missiles.erase(it); 
+	for (int i = 0; i < missiles.size(); ++i) {
+		if (missiles[i] == nullptr) continue;
+		if (missiles[i]->collided || missiles[i]->distance_run >= 50.0f) {
+			missiles[i]->expired = true;
 		}
-		else {
-			m->update(deltaTime);
-			++it; 
-		}
+		else missiles[i]->update(deltaTime);
 	}
+
 	if (player->health <= 0) Game::instance->goToStage(END_STAGE);
 	if (amo == 0) {
 		recharge_timer += deltaTime;
@@ -123,11 +128,34 @@ void PlayStage::btnClick(int btn) {
 			EntityPlayer* player = World::instance->player;
 			//if (!player->has_collided) {
 			EntityMissile* missile = new EntityMissile(player->model);
-			missiles.push_back(missile);
-			amo -= 1;
+			//missiles.push_back(missile);
+			addMissile(missile);
 		}
 		
 	}
+}
+
+void PlayStage::addMissile(EntityMissile* new_missile)
+{
+	// First, try to add the bullet to an empty slot
+	for (int i = 0; i < 10; ++i) {
+		if (missiles[i] == nullptr) {
+			missiles[i] = new_missile;
+			--amo;
+			return;
+		}
+	}
+
+	// Then, try to replace an expired bullet
+	for (int i = 0; i < 10; ++i) {
+		if (missiles[i] != nullptr && missiles[i]->expired) {
+			delete missiles[i];  // Delete the expired bullet
+			missiles[i] = new_missile;
+			--amo;
+			return;
+		}
+	}
+
 }
 
 
