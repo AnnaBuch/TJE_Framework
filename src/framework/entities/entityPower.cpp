@@ -30,6 +30,7 @@ EntityPower::EntityPower(Vector3 position)
 
 void EntityPower::update(float elapsed_time)
 {
+	if (expired) return;
 	model.rotate(360 * DEG2RAD * elapsed_time, Vector3(0, 1, 0));
 }
 
@@ -37,6 +38,7 @@ void EntityPower::render(Camera* camera)
 {
 	//TODO:delete this: only for debugging
 	//renderSphere(camera, Vector3(0.f, 0.5f, 5.f), 1.f);
+	if (expired) return;
 	if (material.shader)
 	{
 		// Enable shader

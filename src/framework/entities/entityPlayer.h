@@ -23,6 +23,7 @@ public:
 	int health = 100;
 	float collision_time = 0.f;
 	bool has_collided = false;
+	int power = 0;
 
 
 };

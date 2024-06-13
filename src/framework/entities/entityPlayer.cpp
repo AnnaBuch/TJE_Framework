@@ -10,7 +10,7 @@
 #include "entityHealth.h"
 #include "entityPower.h"
 #include "framework/audio.h"
-
+#include "game/stages/playStage.h"
 
 bool checkPlayerCollisions(const Vector3& target_pos) {
 	bool collided = false;
@@ -54,11 +54,11 @@ bool checkPlayerCollisions(const Vector3& target_pos) {
 
 void EntityPlayer::testHealthCollisions(const Vector3& target_pos) {
 	
-	for (auto it = Game::instance->play_stage->health.begin(); it != Game::instance->play_stage->health.end();) {
+	for (int i = 0; i < Game::instance->play_stage->health.size(); ++i) {
 		Vector3 colPoint;
 		Vector3 colNormal;
-		EntityHealth* h = *it;
-
+		EntityHealth* h = Game::instance->play_stage->health[i];
+		if (h == nullptr) continue;
 		if (h->mesh->testSphereCollision(h->model, target_pos, 1.f, colPoint, colNormal)
 			/* || h->mesh->testSphereCollision(h->model, target_pos + Vector3(2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
 			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(-2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
@@ -66,38 +66,37 @@ void EntityPlayer::testHealthCollisions(const Vector3& target_pos) {
 			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)
 			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(-4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)*/
 			) {
-			it = Game::instance->play_stage->health.erase(it);
-			if(health < 100)health += 5;
+			//it = Game::instance->play_stage->health.erase(it);
+			h->expired = true;
+			if (health < 100)health += 5;
 			Audio::Play("data/audio/health.wav", 0.2f);
-		}
-		else {
-			++it;
+			return;
 		}
 	}
+
 }
 
 void EntityPlayer::testPowerCollisions(const Vector3& target_pos) {
 
-	for (auto it = Game::instance->play_stage->power.begin(); it != Game::instance->play_stage->power.end();) {
+	for (int i = 0; i < PlayStage::power.size(); ++i) {
 		Vector3 colPoint;
 		Vector3 colNormal;
-		EntityPower* p = *it;
-
+		EntityPower* p = PlayStage::power[i];
+		if (p == nullptr) continue;
 		if (p->mesh->testSphereCollision(p->model, target_pos, 1.f, colPoint, colNormal)
-			/* || p->mesh->testSphereCollision(p->model, target_pos + Vector3(2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
+			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
 			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(-2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
 			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(0.f, 0.5f, -2.f), 2.f, colPoint, colNormal)
-			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)
-			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(-4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)*/
+			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(-4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)
 			) {
-			it = Game::instance->play_stage->power.erase(it);
-			//if (health < 100)health += 5;
+			//it = Game::instance->play_stage->health.erase(it);
+			p->expired = true;
+			++power;
 			Audio::Play("data/audio/health.wav", 0.2f);
-		}
-		else {
-			++it;
+			return;
 		}
 	}
+
 }
 
 //TODO: delete before submission

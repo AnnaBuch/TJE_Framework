@@ -8,6 +8,7 @@
 #include "framework/entities/entityHealth.h"
 #include "framework/entities/entityPower.h"
 #include "framework/audio.h"
+#include "game/stages/playStage.h"
 
 
 void EntityMissile::checkMissileCollisions(const Vector3& target_pos) {
@@ -25,22 +26,21 @@ void EntityMissile::checkMissileCollisions(const Vector3& target_pos) {
 				Vector3 colPoint;
 				Vector3 colNormal;
 				if (collider->mesh->testSphereCollision((*it) * collider->getGlobalMatrix(), target_pos + Vector3(0.f, 0.5f, 5.f), 1.f, colPoint, colNormal)) {
-					// DELETE ASTEROID: delete model from collider
 					float rand_value = random();
 					if (rand_value > 0.5) {
 						rand_value = random();
 						if (rand_value > 0.8) {
 						
 							EntityHealth* health = new EntityHealth(((*it) * collider->getGlobalMatrix()).getTranslation());
-							dynamic_cast<PlayStage*>(Game::instance->current_stage)->health.push_back(health);
+							PlayStage::addHealth(health);
 						}
 					}
 					else {
 						rand_value = random();
-						if (rand_value > 0.8) {
+						if (rand_value > 0.4) {
 
 							EntityPower* power = new EntityPower(((*it) * collider->getGlobalMatrix()).getTranslation());
-							dynamic_cast<PlayStage*>(Game::instance->current_stage)->power.push_back(power);
+							PlayStage::addPower(power);
 
 						}
 					}
@@ -54,7 +54,6 @@ void EntityMissile::checkMissileCollisions(const Vector3& target_pos) {
 									   new BASS_3DVECTOR(player->model.topVector().x, player->model.topVector().y, player->model.topVector().z)
 										);
 					Audio::Play3D("data/audio/collision2.wav", colPoint);
-					//TODO: show fuel/power up
 				}
 				else {
 					++it;
@@ -107,6 +106,8 @@ EntityMissile::EntityMissile(Matrix44 starting_pos)
 
 void EntityMissile::update(float elapsed_time)
 {
+	if (expired) return;
+
 	// Calculate the translation vector
 	Vector3 translation = Vector3(0,0,1) * velocity * elapsed_time;
 	// Update the model matrix with the translation
@@ -117,6 +118,8 @@ void EntityMissile::update(float elapsed_time)
 
 void EntityMissile::render(Camera* camera)
 {
+	if (expired) return;
+
 	//TODO:delete this: only for debugging
 	//renderSphere(camera, Vector3(0.f, 0.5f, 5.f), 1.f);
 	if (material.shader)

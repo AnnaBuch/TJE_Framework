@@ -11,6 +11,8 @@
 
 #include "framework/entities/entityCollider.h"
 #include "game/stages/stage.h"
+#include "game/stages/playStage.h"
+
 
 #include <cmath>
 

@@ -41,29 +41,6 @@ public:
     void onExit() {};
 };
 
-class PlayStage : public Stage {
-    eStages type = PLAY_STAGE;
-public:
-    std::vector<EntityMesh*> scene_roots;
-    float forward_distance = 0.f;
-    float last_forward_added = 80.f;
-    int amo = 10;
-    float recharge_timer = 0.f;
-    std::array<EntityMissile*, 10> missiles;
-    std::vector<EntityHealth*> health;
-    std::vector<EntityPower*> power;
-    //std::map<EntityMissile*, EntityMesh*> missiles;
-
-    void render() override;
-    void update(double deltaTime) override;
-    void btnClick(int btn) override;
-    void addMissile(EntityMissile* new_missile);
-    PlayStage();
-    //EntityMissile* shoot();
-    
-    void onEnter() {};
-    void onExit() {};
-};
 
 class Menu : public Stage {
 
