@@ -13,7 +13,8 @@ enum eStages {
     UNDEFINED,
     INTRO_STAGE,
     PLAY_STAGE,
-    END_STAGE,
+    VICTORY_STAGE,
+    LOSING_STAGE
 
 };
 
@@ -34,21 +35,38 @@ public:
 class IntroStage: public Stage {
     eStages type = INTRO_STAGE;
 public:
-    void init();
+    IntroStage();
+    void render() override;
+    void update(double deltaTime) override;
+    void onEnter() {};
+    void onExit() {};
+    bool menuInitialized = false;
+    EntityUI* background = nullptr;
+    EntityUI* play_button = nullptr;
+    EntityUI* exit_button = nullptr;
+    Camera* camera2d = nullptr;
+};
+
+
+
+
+class VictoryStage : public Stage {
+    eStages type = VICTORY_STAGE;
+public:
+    VictoryStage();
     void render() override;
     void update(double deltaTime) override;
     void onEnter() {};
     void onExit() {};
 };
 
-
-
-
-class EndStage : public Stage {
-    eStages type = END_STAGE;
+class LosingStage : public Stage {
+    eStages type = LOSING_STAGE;
 public:
+    LosingStage();
     void render() override;
     void update(double deltaTime) override;
     void onEnter() {};
     void onExit() {};
+
 };

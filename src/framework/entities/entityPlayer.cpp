@@ -58,13 +58,8 @@ void EntityPlayer::testHealthCollisions(const Vector3& target_pos) {
 		Vector3 colPoint;
 		Vector3 colNormal;
 		EntityHealth* h = Game::instance->play_stage->health[i];
-		if (h == nullptr) continue;
+		if (h == nullptr || h->expired) continue;
 		if (h->mesh->testSphereCollision(h->model, target_pos, 1.f, colPoint, colNormal)
-			/* || h->mesh->testSphereCollision(h->model, target_pos + Vector3(2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
-			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(-2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
-			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(0.f, 0.5f, -2.f), 2.f, colPoint, colNormal)
-			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)
-			|| h->mesh->testSphereCollision(h->model, target_pos + Vector3(-4.f, 0.5f, -1.f), 1.5f, colPoint, colNormal)*/
 			) {
 			//it = Game::instance->play_stage->health.erase(it);
 			h->expired = true;
@@ -82,7 +77,7 @@ void EntityPlayer::testPowerCollisions(const Vector3& target_pos) {
 		Vector3 colPoint;
 		Vector3 colNormal;
 		EntityPower* p = PlayStage::power[i];
-		if (p == nullptr) continue;
+		if (p == nullptr || p->expired) continue;
 		if (p->mesh->testSphereCollision(p->model, target_pos, 1.f, colPoint, colNormal)
 			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
 			|| p->mesh->testSphereCollision(p->model, target_pos + Vector3(-2.f, 0.5f, 2.f), 1.f, colPoint, colNormal)
@@ -144,7 +139,7 @@ void EntityPlayer::render(Camera* camera)
 	renderSphere(camera, Vector3(0.f, 0.5f, -2.f), 2.f);
 	renderSphere(camera, Vector3(4.f, 0.5f, -1.f), 1.5f);
 	renderSphere(camera, Vector3(-4.f, 0.5f, -1.f), 1.5f);*/
-
+	Vector3 position = model.getTranslation();
 	if (material.shader)
 	{
 		// Enable shader
@@ -206,7 +201,8 @@ void EntityPlayer::update(float deltaTime)
 
 	//model.rotate(toRotate * DEG2RAD, Vector3(0, 0, 1));
 	model.translate(move);
-	if (!has_collided && checkPlayerCollisions(model.getTranslation())) {
+	bool collision = checkPlayerCollisions(model.getTranslation());
+	if (!has_collided && collision) {
 		//std::cout << "collided" << std::endl;
 		health -= 5;
 		has_collided = true;
@@ -215,7 +211,7 @@ void EntityPlayer::update(float deltaTime)
 
 	if (has_collided) {
 		collision_time += deltaTime;
-		if (collision_time >= 3) {
+		if (collision_time >= 1.5) {
 			has_collided = false;
 			collision_time = 0.f;
 		}
@@ -226,7 +222,6 @@ void EntityPlayer::update(float deltaTime)
 		health = 0;
 	}
 	velocity = std::min(50.f, velocity + deltaTime / 3);
-	//velocity += deltaTime/3;
 
 }
 

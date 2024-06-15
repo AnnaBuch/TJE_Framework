@@ -13,25 +13,7 @@
 #include <framework/input.h>
 
 
-void EndStage::render()
-{
-	drawText(10, 25, "End stage", Vector3(1, 1, 1), 6);
-}
-
-void EndStage::update(double deltaTime)
-{
-
-}
-
-
-
-
-void IntroStage::init() {
-    static bool menuInitialized = false;
-    static Entity* background = nullptr;
-    static Entity* play_button = nullptr;
-    static Entity* exit_button = nullptr;
-    static Camera* camera2d = nullptr;
+IntroStage::IntroStage() {
 
     int world_width = Game::instance->window_width;
     int world_height = Game::instance->window_height;
@@ -61,12 +43,12 @@ void IntroStage::init() {
 
 
 void IntroStage::render() {
-    drawText(10, 25, "Menu", Vector3(1, 1, 1), 4);
+    //drawText(10, 25, "Menu", Vector3(1, 1, 1), 4);
 
     
-    //background->render(camera2d);
-    //play_button->render(camera2d);
-    //exit_button->render(camera2d);
+    background->render(World::instance->camera2D);
+    play_button->render(World::instance->camera2D);
+    exit_button->render(World::instance->camera2D);
 }
 void IntroStage::update(double deltaTime) {
 
@@ -93,6 +75,31 @@ void IntroStage::update(double deltaTime) {
     // Render menu components
 
     */
+}
+
+
+VictoryStage::VictoryStage()
+{
+}
+
+void VictoryStage::render()
+{
+}
+
+void VictoryStage::update(double deltaTime)
+{
+}
+
+LosingStage::LosingStage()
+{
+}
+
+void LosingStage::render()
+{
+}
+
+void LosingStage::update(double deltaTime)
+{
 }
 
 

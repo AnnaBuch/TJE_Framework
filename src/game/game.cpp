@@ -54,7 +54,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	bool sceneCheck = World::instance->parseScene("data/myscene.scene", play_stage->scene_roots[0], 0.f);
 	stages[PLAY_STAGE] = play_stage;
-	stages[END_STAGE] = new EndStage();
+	stages[VICTORY_STAGE] = new VictoryStage();
+	stages[LOSING_STAGE] = new LosingStage();
 	IntroStage* intro_stage = new IntroStage();
 	stages[INTRO_STAGE] = intro_stage;
 	current_stage = dynamic_cast<Stage*>(intro_stage);

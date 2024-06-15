@@ -24,6 +24,7 @@ public:
 	float collision_time = 0.f;
 	bool has_collided = false;
 	int power = 0;
+	int asteroids_destorid = 0;
 
 
 };

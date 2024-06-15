@@ -10,10 +10,17 @@ class EntityMesh;
 class EntityPlayer;
 class Camera;
 
+enum eGameMode {
+	ENDLESS,
+	REGULAR
+};
+
 class World {
 public:
 	static World* instance;
-	
+
+	eGameMode gameMode = REGULAR;
+
 	Entity* root = nullptr;
 	std::map<std::string, sRenderData> meshes_to_load;
 

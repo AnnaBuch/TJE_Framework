@@ -20,6 +20,7 @@ public:
     float last_forward_added = 80.f;
     static int amo;
     float recharge_timer = 0.f;
+    float time_played = 0.f;
     static std::array<EntityMissile*, 10> missiles;
     static std::array<EntityHealth*, 5> health;
     static std::array<EntityPower*, 5> power;

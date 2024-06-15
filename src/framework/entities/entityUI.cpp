@@ -21,7 +21,7 @@ EntityUI::EntityUI(Vector2 position, Vector2 size, const Material& material, eBu
 	this->size = size;
 	this->material = material;
 	this->buttonId = buttonId;
-
+	quad = new Mesh();
 	quad->createQuad(position.x, position.y, size.x, size.y, true);
 
 }

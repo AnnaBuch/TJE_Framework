@@ -69,7 +69,7 @@ void PlayStage::render()
 }
 
 void PlayStage::update(double deltaTime) {
-
+	time_played += deltaTime;
 	Camera* camera = Camera::current;
 	EntityPlayer* player = World::instance->player;
 
