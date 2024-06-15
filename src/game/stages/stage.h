@@ -11,7 +11,6 @@ class EntityPower;
 
 enum eStages {
     UNDEFINED,
-    MENU,
     INTRO_STAGE,
     PLAY_STAGE,
     END_STAGE,
@@ -35,6 +34,7 @@ public:
 class IntroStage: public Stage {
     eStages type = INTRO_STAGE;
 public:
+    void init();
     void render() override;
     void update(double deltaTime) override;
     void onEnter() {};
@@ -42,29 +42,6 @@ public:
 };
 
 
-class Menu : public Stage {
-
-    eStages type = MENU;
-public:
-    Menu() {};
-
-    Texture* fondo;
-    int world_width;
-    int world_height;
-
-    Camera* camera2d;
-
-    Entity* background;
-    Entity* play_button;
-    Entity* exit_button;
-
-
-    void init();
-    void restart();
-    void render();
-    void update(float seconds_elapsed);
-    void onButtonPressed(eButtonId buttonid) {};
-};
 
 
 class EndStage : public Stage {
