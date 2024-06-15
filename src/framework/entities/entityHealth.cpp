@@ -7,28 +7,6 @@
 #include "framework/camera.h"
 
 
-
-
-//void EntityMissile::renderSphere(Camera* camera, Vector3 translation, float radius) {
-//	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/flat.fs");
-//	Mesh* mesh = Mesh::Get("data/meshes/sphere.obj");
-//	Matrix44 m = model;
-//
-//	shader->enable();
-//	m.translate(translation);
-//	m.scale(radius, radius, radius);
-//
-//	shader->setUniform("u_color", Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-//	shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-//	shader->setUniform("u_model", m);
-//
-//	mesh->render(GL_LINES);
-//
-//	shader->disable();
-//
-//}
-
-
 EntityHealth::EntityHealth()
 {
 	material = Material();
@@ -57,8 +35,6 @@ void EntityHealth::update(float elapsed_time)
 
 void EntityHealth::render(Camera* camera)
 {
-	//TODO:delete this: only for debugging
-	//renderSphere(camera, Vector3(0.f, 0.5f, 5.f), 1.f);
 	if (expired) return;
 
 	if (material.shader)

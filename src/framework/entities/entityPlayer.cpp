@@ -94,27 +94,6 @@ void EntityPlayer::testPowerCollisions(const Vector3& target_pos) {
 
 }
 
-//TODO: delete before submission
-void EntityPlayer::renderSphere(Camera* camera, Vector3 translation, float radius) {
-	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/flat.fs");
-	Mesh* mesh = Mesh::Get("data/meshes/sphere.obj");
-	Matrix44 m = model;
-
-	shader->enable();
-	m.translate(translation);
-	m.scale(radius, radius, radius);
-
-	shader->setUniform("u_color", Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-	shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-	shader->setUniform("u_model", m);
-
-	mesh->render(GL_LINES);
-
-	shader->disable();
-
-}
-
-
 
 EntityPlayer::EntityPlayer()
 {
@@ -128,17 +107,6 @@ EntityPlayer::EntityPlayer()
 void EntityPlayer::render(Camera* camera)
 {
 
-
-
-
-	//To debug, make spheres visible TODO: delete before submission
-	
-	//renderSphere(camera, Vector3(0.f, 0.5f, 2.f), 1.f);
-	/*renderSphere(camera, Vector3(2.f, 0.5f, 2.f), 1.f);
-	renderSphere(camera, Vector3(-2.f, 0.5f, 2.f), 1.f);
-	renderSphere(camera, Vector3(0.f, 0.5f, -2.f), 2.f);
-	renderSphere(camera, Vector3(4.f, 0.5f, -1.f), 1.5f);
-	renderSphere(camera, Vector3(-4.f, 0.5f, -1.f), 1.5f);*/
 	Vector3 position = model.getTranslation();
 	if (material.shader)
 	{
@@ -177,36 +145,20 @@ void EntityPlayer::update(float deltaTime)
 	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) move.y = -1.f;
 	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) {
 		move.x = 1.f;
-		/*rotation += 30 * deltaTime;
-		if (rotation < 30)
-			toRotate = 30 * deltaTime;*/
-		//rotation = 30 / deltaTime;
+
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) {
 		move.x = -1.f;
-		//rotation -= 30* deltaTime;
-		////rotation = rotation - (30 / deltaTime) < -30 ? -30 : rotation - (30 / deltaTime);
-		//if (rotation >= -30) {
-		//	toRotate = -30 * deltaTime;
-		//	//model.rotate((-30 * deltaTime) * DEG2RAD, model.frontVector().normalize());
-		//	//std::cout << "rotation: " <<  rotation << std::endl;
-
-		//}
 	}
-	
-	//TODO: try smooth spaeceship movement, aka: rebot 
-	
+		
 	move.normalize();
 	move *= velocity * deltaTime;
 
-	//model.rotate(toRotate * DEG2RAD, Vector3(0, 0, 1));
 	model.translate(move);
 	bool collision = checkPlayerCollisions(model.getTranslation());
 	if (!has_collided && collision) {
-		//std::cout << "collided" << std::endl;
 		health -= 5;
 		has_collided = true;
-		//TODO: sound effects
 	}
 
 	if (has_collided) {

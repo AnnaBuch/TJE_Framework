@@ -1,6 +1,8 @@
 #pragma once
 #include "framework/entities/entityUI.h"
 #include "stage.h"
+#include "framework/audio.h"
+
 
 #include <array>
 
@@ -33,7 +35,7 @@ public:
     static void addPower(EntityPower* new_power);
     //~PlayStage();
     
-    void onEnter() {};
-    void onExit() {};
+    void onEnter();
+    void onExit();
 };
 

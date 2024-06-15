@@ -69,9 +69,20 @@ void PlayStage::render()
 }
 
 void PlayStage::update(double deltaTime) {
-	time_played += deltaTime;
-	Camera* camera = Camera::current;
+
 	EntityPlayer* player = World::instance->player;
+	time_played += deltaTime;
+
+	if (player->health <= 0) {
+		Game::instance->goToStage(LOSING_STAGE);
+		return;
+	}
+	if (World::instance->gameMode == REGULAR && time_played >= 60.f) {
+		Game::instance->goToStage(VICTORY_STAGE);
+		return;
+	}
+
+	Camera* camera = Camera::current;
 
 	player->update(deltaTime);
 
@@ -85,7 +96,7 @@ void PlayStage::update(double deltaTime) {
 
 	//update scene
 	forward_distance += player->velocity * deltaTime;
-	if (last_forward_added - forward_distance < 0 ) {
+	if (last_forward_added - forward_distance < 0  && time_played < 55) {
 		last_forward_added += 90.f; //més o menys per on anem -> on s'ha de carregar la nova escena
 		EntityMesh* forward_root = new EntityMesh(new Mesh(), Material(), "");
 		forward_root->model.translate(0, 0, last_forward_added);
@@ -109,7 +120,6 @@ void PlayStage::update(double deltaTime) {
 		}
 	}
 
-	if (player->health <= 0) Game::instance->goToStage(END_STAGE);
 	if (amo == 0) {
 		recharge_timer += deltaTime;
 	}
@@ -205,5 +215,13 @@ void PlayStage::addPower(EntityPower* new_power)
 		}
 	}
 
+}
+
+void PlayStage::onEnter() {
+	theme = Audio::Play("data/audio/main_theme.wav", 0.3f, BASS_SAMPLE_LOOP);
+}
+
+void PlayStage::onExit() {
+	Audio::Stop(theme);
 }
 

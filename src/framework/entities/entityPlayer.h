@@ -11,7 +11,6 @@ public:
 	//void render(Camera* camera) override;
 	void update(float elapsed_time) override;
 	void render(Camera* camera) override;
-	void renderSphere(Camera* camera, Vector3 translation, float radius); //TODO: delete before submitting
 	void testHealthCollisions(const Vector3& target_pos);
 	void testPowerCollisions(const Vector3& target_pos);
 
@@ -25,6 +24,7 @@ public:
 	bool has_collided = false;
 	int power = 0;
 	int asteroids_destorid = 0;
+	
 
 
 };

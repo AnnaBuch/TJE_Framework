@@ -30,8 +30,6 @@ void EntityMesh::render(Camera* camera)
 		}
 	}
 
-	//TODO: si hi ha problemes de rendiment fer frustrum amb instancing 
-
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
@@ -51,7 +49,7 @@ void EntityMesh::render(Camera* camera)
 
 
 	if (material.diffuse)
-		material.shader->setUniform("u_texture", material.diffuse, 0); //TODO: change the 0 when necessary
+		material.shader->setUniform("u_texture", material.diffuse, 0);
 
 	if(!isInstanced)
 		material.shader->setUniform("u_model", getGlobalMatrix());
