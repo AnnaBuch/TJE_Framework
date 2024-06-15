@@ -29,52 +29,64 @@ IntroStage::IntroStage() {
     // Play button
     Material play_mat;
     play_mat.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-    play_mat.diffuse = Texture::Get("data/ui/start.png"); // Replace with your play button image
-    play_button = new EntityUI(Vector2(world_width * 0.5, 400), Vector2(240, 60), play_mat, eButtonId::PlayButton);
+    play_mat.diffuse = Texture::Get("data/ui/noraml.png"); // Replace with your play button image
+    play_button = new EntityUI(Vector2(world_width * 0.5, 390), Vector2(240, 60), play_mat, eButtonId::PlayButton);
 
     // Exit button
     Material exit_mat;
     exit_mat.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-    exit_mat.diffuse = Texture::Get("data/ui/end.png"); // Replace with your exit button image
-    exit_button = new EntityUI(Vector2(world_width * 0.5, 500), Vector2(240, 60), exit_mat, eButtonId::EndButton);
+    exit_mat.diffuse = Texture::Get("data/ui/endless.png"); // Replace with your exit button image
+    exit_button = new EntityUI(Vector2(world_width * 0.5, 470), Vector2(240, 60), exit_mat, eButtonId::EndButton);
+
+
+
 
     menuInitialized = true;
+
 }
 
 
 void IntroStage::render() {
     //drawText(10, 25, "Menu", Vector3(1, 1, 1), 4);
 
-    
     background->render(World::instance->camera2D);
     play_button->render(World::instance->camera2D);
     exit_button->render(World::instance->camera2D);
+
+    drawText(230, 270, "   Test your skills!", Vector3(0.729, 0.511, 1), 3);
+    drawText(230, 305, "Choose Challenge Mode", Vector3(0.729, 0.511, 1), 3);
+
 }
+
 void IntroStage::update(double deltaTime) {
 
-    if (Input::isKeyPressed(SDL_SCANCODE_SPACE)) {
-        Game::instance->goToStage(PLAY_STAGE);
-    }
+    Stage::update(deltaTime);
 
-    /*
-    // Check for button press
+    // Check if the left mouse button is pressed
     if (Input::isMousePressed(SDL_BUTTON_LEFT)) {
-        // Check if play button is pressed
-        if (play_button->contains(Input::mouse_position)) {
+        Vector2 mouse_pos = Input::mouse_position;
+
+        // Check if the mouse click is within the bounds of the play_button
+        if (play_button &&
+            mouse_pos.x > (play_button->position.x - play_button->size.x * 0.5f) &&
+            mouse_pos.x < (play_button->position.x + play_button->size.x * 0.5f) &&
+            mouse_pos.y >(play_button->position.y - play_button->size.y * 0.5f) &&
+            mouse_pos.y < (play_button->position.y + play_button->size.y * 0.5f)) {
+
+
             Game::instance->goToStage(PLAY_STAGE);
         }
-        // Check if exit button is pressed
-        else if (exit_button->contains(Input::mouse_position)) {
-            // Perform exit action (not implemented here)
-            // For simplicity, you might want to add an exit function
+        if (exit_button &&
+            mouse_pos.x > (exit_button->position.x - exit_button->size.x * 0.5f) &&
+            mouse_pos.x < (exit_button->position.x + exit_button->size.x * 0.5f) &&
+            mouse_pos.y >(exit_button->position.y - exit_button->size.y * 0.5f) &&
+            mouse_pos.y < (exit_button->position.y + exit_button->size.y * 0.5f)) {
+
+            //change gameode 
+            Game::instance->goToStage(PLAY_STAGE);
+            
         }
     }
-    background->update(seconds_elapsed);
-	play_button->update(seconds_elapsed);
-	exit_button->update(seconds_elapsed);
-    // Render menu components
-
-    */
 }
 
 

@@ -109,7 +109,7 @@ void PlayStage::update(double deltaTime) {
 		}
 	}
 
-	if (player->health <= 0) Game::instance->goToStage(END_STAGE);
+	if (player->health <= 0) Game::instance->goToStage(VICTORY_STAGE);
 	if (amo == 0) {
 		recharge_timer += deltaTime;
 	}
