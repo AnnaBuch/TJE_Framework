@@ -14,15 +14,10 @@
 World::World() 
 {
 	Camera* camera = Camera::current;
-	//camera = new Camera();
-	// Create our camera
-	//this->root = root;
-
 
 	Material landscape_cubemap;
 	landscape_cubemap.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/cubemap.fs");
 	landscape_cubemap.diffuse = new Texture();
-	//TODO: buscar pngs 
 	landscape_cubemap.diffuse->loadCubemap("landscape", {
 	"data/px.png",
 	"data/nx.png",

@@ -1,6 +1,8 @@
 #pragma once
 #include "framework/entities/entityMesh.h"
 #include "framework/entities/entityUI.h"
+#include "framework/audio.h"
+
 
 #include <map>
 #include <array>
@@ -30,6 +32,8 @@ public:
     virtual void onEnter() {};
     virtual void onExit() {};
     virtual void btnClick(int btn) {};
+    HCHANNEL theme;
+
 };
 
 class IntroStage: public Stage {
@@ -38,8 +42,8 @@ public:
     IntroStage();
     void render() override;
     void update(double deltaTime) override;
-    void onEnter() {};
-    void onExit() {};
+    void onEnter();
+    void onExit();
     bool menuInitialized = false;
     EntityUI* background = nullptr;
     EntityUI* play_button = nullptr;
@@ -56,8 +60,8 @@ public:
     VictoryStage();
     void render() override;
     void update(double deltaTime) override;
-    void onEnter() {};
-    void onExit() {};
+    void onEnter();
+    void onExit();
 };
 
 class LosingStage : public Stage {
@@ -66,7 +70,7 @@ public:
     LosingStage();
     void render() override;
     void update(double deltaTime) override;
-    void onEnter() {};
-    void onExit() {};
+    void onEnter();
+    void onExit();
 
 };

@@ -36,8 +36,7 @@ void EntityPower::update(float elapsed_time)
 
 void EntityPower::render(Camera* camera)
 {
-	//TODO:delete this: only for debugging
-	//renderSphere(camera, Vector3(0.f, 0.5f, 5.f), 1.f);
+
 	if (expired) return;
 	if (material.shader)
 	{

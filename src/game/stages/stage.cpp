@@ -113,6 +113,27 @@ void LosingStage::render()
 void LosingStage::update(double deltaTime)
 {
 }
+void IntroStage::onEnter() {
+    theme = Audio::Play("data/audio/idle.wav", 1, BASS_SAMPLE_LOOP);
+}
 
+void IntroStage::onExit() {
+    Audio::Stop(theme);
+}
+
+void VictoryStage::onEnter() {
+    theme = Audio::Play("data/audio/idle.wav", 1, BASS_SAMPLE_LOOP);
+}
+
+void VictoryStage::onExit() {
+    Audio::Stop(theme);
+}
+void LosingStage::onEnter() {
+    theme = Audio::Play("data/audio/idle.wav", 1, BASS_SAMPLE_LOOP);
+}
+
+void LosingStage::onExit() {
+    Audio::Stop(theme);
+}
 
 

@@ -54,6 +54,7 @@ void EntityMissile::checkMissileCollisions(const Vector3& target_pos) {
 									   new BASS_3DVECTOR(player->model.topVector().x, player->model.topVector().y, player->model.topVector().z)
 										);
 					Audio::Play3D("data/audio/collision2.wav", colPoint);
+					++player->asteroids_destorid;
 				}
 				else {
 					++it;
@@ -63,26 +64,6 @@ void EntityMissile::checkMissileCollisions(const Vector3& target_pos) {
 	
 	}
 }
-
-void EntityMissile::renderSphere(Camera* camera, Vector3 translation, float radius) {
-	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/flat.fs");
-	Mesh* mesh = Mesh::Get("data/meshes/sphere.obj");
-	Matrix44 m = model;
-
-	shader->enable();
-	m.translate(translation);
-	m.scale(radius, radius, radius);
-
-	shader->setUniform("u_color", Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-	shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-	shader->setUniform("u_model", m);
-
-	mesh->render(GL_LINES);
-
-	shader->disable();
-
-}
-
 
 EntityMissile::EntityMissile()
 {
@@ -120,8 +101,6 @@ void EntityMissile::render(Camera* camera)
 {
 	if (expired) return;
 
-	//TODO:delete this: only for debugging
-	//renderSphere(camera, Vector3(0.f, 0.5f, 5.f), 1.f);
 	if (material.shader)
 	{
 		// Enable shader
