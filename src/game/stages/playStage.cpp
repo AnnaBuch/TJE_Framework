@@ -96,7 +96,7 @@ void PlayStage::update(double deltaTime) {
 
 	//update scene
 	forward_distance += player->velocity * deltaTime;
-	if (last_forward_added - forward_distance < 0  && time_played < 55) {
+	if (last_forward_added - forward_distance < 0  && (time_played < 55 || World::instance->gameMode == ENDLESS)) {
 		last_forward_added += 90.f; //m�s o menys per on anem -> on s'ha de carregar la nova escena
 		EntityMesh* forward_root = new EntityMesh(new Mesh(), Material(), "");
 		forward_root->model.translate(0, 0, last_forward_added);

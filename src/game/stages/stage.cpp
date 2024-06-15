@@ -73,7 +73,7 @@ void IntroStage::update(double deltaTime) {
             mouse_pos.y >(play_button->position.y - play_button->size.y * 0.5f) &&
             mouse_pos.y < (play_button->position.y + play_button->size.y * 0.5f)) {
 
-
+            World::instance->gameMode = REGULAR;
             Game::instance->goToStage(PLAY_STAGE);
         }
         if (exit_button &&
@@ -83,6 +83,7 @@ void IntroStage::update(double deltaTime) {
             mouse_pos.y < (exit_button->position.y + exit_button->size.y * 0.5f)) {
 
             //change gameode 
+            World::instance->gameMode = ENDLESS;
             Game::instance->goToStage(PLAY_STAGE);
             
         }
