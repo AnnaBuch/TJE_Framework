@@ -25,7 +25,7 @@ PlayStage::PlayStage()
 	missiles.fill(nullptr);
 	health.fill(nullptr);
 	power.fill(nullptr);
-
+	amo = 10;
 }
 
 
