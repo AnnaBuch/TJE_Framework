@@ -2,7 +2,7 @@ Arnau Adroher 240499 arnau.adroher01@estudiant.upf.edu
 Anna Buch 240771 anna.buch01@estudiant.upf.edu
 
 Arnau:
-	- Intro stage, victory stage, losing stage, UI, art (blender, imgs)
+	- Intro stage, victory stage, losing stage, help, UI, art (blender, imgs)
 Anna:
 	- Play stage -> gameplay, scene loading, audio, game restart
 
