@@ -4,7 +4,7 @@ Anna Buch 240771 anna.buch01@estudiant.upf.edu
 Arnau:
 	- Intro stage, victory stage, losing stage, UI, art (blender, imgs)
 Anna:
-	- Play stage -> gameplay, scene loading, audio
+	- Play stage -> gameplay, scene loading, audio, game restart
 
 There are two game modes: endless and normal
 	- normal: play for a minute without dying collecting as much power cells as possible
