@@ -9,6 +9,7 @@
 #include "framework/entities/entityMissile.h"
 #include "framework/entities/entityHealth.h"
 #include "framework/entities/entityPower.h"
+#include "game/stages/playStage.h"
 
 
 #include <framework/input.h>
@@ -181,6 +182,10 @@ void VictoryStage::update(double deltaTime) {
             currentFrameIndex++;
         }
     }
+
+    if (Input::isKeyPressed(SDL_SCANCODE_SPACE)) {
+        Game::instance->goToStage(INTRO_STAGE);
+    }
 }
 
 VictoryStage::~VictoryStage() {
@@ -241,6 +246,10 @@ void LosingStage::render()
 
 void LosingStage::update(double deltaTime)
 {
+	if (Input::isKeyPressed(SDL_SCANCODE_SPACE)) {
+        Game::instance->goToStage(INTRO_STAGE);
+    }
+
 }
 
 
@@ -289,6 +298,26 @@ void HelpStage::update(double deltaTime)
 
 
 void IntroStage::onEnter() {
+    Game* game = Game::instance;
+    game->fps = 0;
+    game->frame = 0;
+    game->time = 0.0f;
+    game->elapsed_time = 0.0f;
+    delete Camera::current;
+    Camera::current = new Camera();
+
+    delete World::instance;
+    World::instance = new World();    
+    PlayStage* play_stage = new PlayStage();
+    delete Game::instance->play_stage;
+    Game::instance->play_stage = play_stage;
+    play_stage->scene_roots.push_back(new EntityMesh(new Mesh(), Material(), ""));
+    play_stage->scene_roots[0]->model.translate(0, 0, 100.f);
+    bool sceneCheck = World::instance->parseScene("data/myscene.scene", play_stage->scene_roots[0], 0.f);
+    Game::instance->stages[PLAY_STAGE] = play_stage;
+    Game::instance->stages[LOSING_STAGE] = new LosingStage();
+
+    Game::instance->stages[VICTORY_STAGE] = new VictoryStage();
     theme = Audio::Play("data/audio/idle.wav", 1, BASS_SAMPLE_LOOP);
 }
 
@@ -297,7 +326,7 @@ void IntroStage::onExit() {
 }
 
 void VictoryStage::onEnter() {
-    theme = Audio::Play("data/audio/idle.wav", 1, BASS_SAMPLE_LOOP);
+    theme = Audio::Play("data/audio/idle.wav", 1, BASS_SAMPLE_MONO);
 }
 
 void VictoryStage::onExit() {
