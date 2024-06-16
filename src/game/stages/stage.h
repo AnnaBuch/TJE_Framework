@@ -77,5 +77,7 @@ public:
     void update(double deltaTime) override;
     void onEnter();
     void onExit();
+    Camera* camera2d = nullptr;
+    EntityUI* end = nullptr;
 
 };

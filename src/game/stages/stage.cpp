@@ -77,7 +77,7 @@ void IntroStage::update(double deltaTime) {
             mouse_pos.y < (play_button->position.y + play_button->size.y * 0.5f)) {
 
             World::instance->gameMode = REGULAR;
-            Game::instance->goToStage(VICTORY_STAGE);
+            Game::instance->goToStage(PLAY_STAGE);
         }
         if (exit_button &&
             mouse_pos.x > (exit_button->position.x - exit_button->size.x * 0.5f) &&
@@ -99,7 +99,7 @@ VictoryStage::VictoryStage() {
     int world_width = Game::instance->window_width;
     int world_height = Game::instance->window_height;
 
-    for (int i = 1; i <= numFrames; ++i) {
+    for (int i = 36; i <= numFrames; ++i) {
         std::string filename = "data/ui/cinematic/output_" + std::to_string(i) + ".png";
         printf("Loading frame %s\n", filename.c_str());
         Texture* texture = Texture::Get(filename.c_str());
@@ -130,9 +130,9 @@ void VictoryStage::render() {
             EntityPlayer* player = World::instance->player;
             int asteroidsDestroyed = player->asteroids_destorid;
             int health = player->health;
-            int power = player->power;  
+            int power = player->power;
 
-            double destructionPercentage = ((health / 100) * 0.30 + (asteroidsDestroyed / 30) * 0.30 + (power / 15 * 0.40)) * 100;
+            double destructionPercentage = ((static_cast<double>(health) / 100) * 0.30 + (static_cast<double>(asteroidsDestroyed) / 15) * 0.30 + (static_cast<double>(power) / 8) * 0.40) * 100;
 
             // Convert the number to a string and draw it
             std::string resultsText = "Asteroids Destroyed: " + std::to_string(asteroidsDestroyed);
@@ -179,14 +179,53 @@ VictoryStage::~VictoryStage() {
 
 
 LosingStage::LosingStage(){
+
+    int world_width = Game::instance->window_width;
+    int world_height = Game::instance->window_height;
+
+    camera2d = World::instance->camera2D;
+
+    // Background image
+    Material end_mat;
+    end_mat.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+    end_mat.diffuse = Texture::Get("data/ui/game_over.png");
+    end = new EntityUI(Vector2(world_width * 0.5, world_height * 0.5), Vector2(world_width, world_height), end_mat);
 }
 
 void LosingStage::render()
 {
+    end->render(World::instance->camera2D);
+    drawText(200, 100, "   RESULTS", Vector3(0.729, 0.511, 1), 6);
+
+    /* If gamemode noraml print GAME OVER/ else print resuts*/
+
+    EntityPlayer* player = World::instance->player;
+    int asteroidsDestroyed = player->asteroids_destorid;
+    int health = player->health;
+    int power = player->power;
+    float time = dynamic_cast<PlayStage*>(Game::instance->stages[PLAY_STAGE])->time_played;
+    
+
+    // Convert the number to a string and draw it
+    std::string resultsText = "Asteroids Destroyed: " + std::to_string(asteroidsDestroyed);
+    std::string resultsText3 = "Power Containers Collected: " + std::to_string(power);
+
+    drawText(50, 240, resultsText.c_str(), Vector3(0.729, 0.511, 1), 4);
+    drawText(50, 280, resultsText3.c_str(), Vector3(0.729, 0.511, 1), 4);
+    drawText(50, 340, "----------------------------", Vector3(0.729, 0.511, 1), 4);
+    
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(2) << time;
+    std::string time_aa = ss.str();
+
+
+    drawText(50, 380, "Total time: " + time_aa, Vector3(0.729, 0.511, 1), 4);
+    
 }
 
 void LosingStage::update(double deltaTime)
 {
+    Stage::update(deltaTime);
 }
 
 
@@ -199,7 +238,7 @@ void IntroStage::onExit() {
 }
 
 void VictoryStage::onEnter() {
-    theme = Audio::Play("data/audio/victory2.wav", 1, BASS_SAMPLE_MONO);
+    theme = Audio::Play("data/audio/v_1.wav", 1, BASS_SAMPLE_MONO);
 }
 
 void VictoryStage::onExit() {
