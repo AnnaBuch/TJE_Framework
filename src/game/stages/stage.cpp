@@ -42,8 +42,10 @@ IntroStage::IntroStage() {
     exit_mat.diffuse = Texture::Get("data/ui/endless.png"); 
     exit_button = new EntityUI(Vector2(world_width * 0.5, 470), Vector2(240, 60), exit_mat, eButtonId::EndButton);
 
-
-
+    Material help_mat;
+    help_mat.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+    help_mat.diffuse = Texture::Get("data/ui/help_b.png");
+    help_button = new EntityUI(Vector2(world_width * 0.5, 550), Vector2(180, 40), help_mat, eButtonId::HelpButton);
 
     menuInitialized = true;
 
@@ -56,6 +58,7 @@ void IntroStage::render() {
     background->render(World::instance->camera2D);
     play_button->render(World::instance->camera2D);
     exit_button->render(World::instance->camera2D);
+    help_button->render(World::instance->camera2D);
 
     drawText(230, 270, "   Test your skills!", Vector3(0.729, 0.511, 1), 3);
     drawText(230, 305, "Choose Challenge Mode", Vector3(0.729, 0.511, 1), 3);
@@ -91,12 +94,21 @@ void IntroStage::update(double deltaTime) {
             Game::instance->goToStage(PLAY_STAGE);
             
         }
+        if (help_button &&
+            mouse_pos.x > (help_button->position.x - help_button->size.x * 0.5f) &&
+            mouse_pos.x < (help_button->position.x + help_button->size.x * 0.5f) &&
+            mouse_pos.y >(help_button->position.y - help_button->size.y * 0.5f) &&
+            mouse_pos.y < (help_button->position.y + help_button->size.y * 0.5f)) {
+
+            Game::instance->goToStage(HELP_STAGE);
+
+        }
     }
 }
 
 
 VictoryStage::VictoryStage() {
-    const int numFrames = 200; 
+    const int numFrames = 37; 
     int world_width = Game::instance->window_width;
     int world_height = Game::instance->window_height;
 
@@ -126,7 +138,7 @@ void VictoryStage::render() {
         frames[currentFrameIndex]->render(World::instance->camera2D);
 
         if (currentFrameIndex == frames.size() - 1) {
-            drawText(200, 100, "   RESULTS", Vector3(0.729, 0.511, 1), 6);
+            drawText(200, 100, "   SCORE", Vector3(0.729, 0.511, 1), 6);
 
             EntityPlayer* player = World::instance->player;
             int asteroidsDestroyed = player->asteroids_destorid;
@@ -196,7 +208,7 @@ LosingStage::LosingStage(){
 void LosingStage::render()
 {
     end->render(World::instance->camera2D);
-    drawText(200, 100, "   RESULTS", Vector3(0.729, 0.511, 1), 6);
+    drawText(200, 100, "  YOU LOST", Vector3(0.729, 0.511, 1), 6);
 
     /* If gamemode noraml print GAME OVER/ else print resuts*/
 
@@ -205,7 +217,7 @@ void LosingStage::render()
     int health = player->health;
     int power = player->power;
     float time = dynamic_cast<PlayStage*>(Game::instance->stages[PLAY_STAGE])->time_played;
-    
+
 
     // Convert the number to a string and draw it
     std::string resultsText = "Asteroids Destroyed: " + std::to_string(asteroidsDestroyed);
@@ -213,20 +225,65 @@ void LosingStage::render()
 
     drawText(50, 240, resultsText.c_str(), Vector3(0.729, 0.511, 1), 4);
     drawText(50, 280, resultsText3.c_str(), Vector3(0.729, 0.511, 1), 4);
-    drawText(50, 340, "----------------------------", Vector3(0.729, 0.511, 1), 4);
-    
-    std::stringstream ss;
-    ss << std::fixed << std::setprecision(2) << time;
-    std::string time_aa = ss.str();
+
+    if (World::instance->gameMode == ENDLESS) {
+
+        drawText(50, 340, "----------------------------", Vector3(0.729, 0.511, 1), 4);
+
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(2) << time;
+        std::string time_aa = ss.str();
 
 
-    drawText(50, 380, "Total time: " + time_aa + "s", Vector3(0.729, 0.511, 1), 4);
-    
+        drawText(50, 380, "Total time: " + time_aa + "s", Vector3(0.729, 0.511, 1), 4);
+    }
 }
 
 void LosingStage::update(double deltaTime)
 {
-    Stage::update(deltaTime);
+}
+
+
+HelpStage::HelpStage() {
+
+    int world_width = Game::instance->window_width;
+    int world_height = Game::instance->window_height;
+
+    camera2d = World::instance->camera2D;
+
+    // Background image
+    Material end_mat;
+    end_mat.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+    end_mat.diffuse = Texture::Get("data/ui/sky.png");
+    end = new EntityUI(Vector2(world_width * 0.5, world_height * 0.5), Vector2(world_width, world_height), end_mat);
+}
+
+void HelpStage::render()
+{
+    end->render(World::instance->camera2D);
+
+
+    EntityPlayer* player = World::instance->player;
+
+     drawText(20, 20, "CONTROLS:", Vector3(0.729, 0.511, 1), 5);
+     drawText(20, 100, "AWSD or ARROW KEYS to move", Vector3(0.729, 0.511, 1), 3);
+     drawText(20, 140, "LEFT CLICK to shoot", Vector3(0.729, 0.511, 1), 3);
+     drawText(20, 200, "OBECIVES:", Vector3(0.729, 0.511, 1), 5);
+     drawText(20, 240, "NORMAL: Reach the end and destroy enemy planet", Vector3(0.729, 0.511, 1), 3);
+     drawText(20, 280, "ENDLESS: Destroy as much asteroids as u can", Vector3(0.729, 0.511, 1), 3);
+     drawText(20, 340, "POWERUPS:", Vector3(0.729, 0.511, 1), 5);
+     drawText(20, 380, "HEALTH: Restores health", Vector3(0.729, 0.511, 1), 3);
+     drawText(20, 420, "POWER: Energy to destroy final planet", Vector3(0.729, 0.511, 1), 3);
+     drawText(200, 550, "Press SPACE to go back", Vector3(1, 1, 1), 3);
+}
+
+void HelpStage::update(double deltaTime)
+{
+
+    if (Input::isKeyPressed(SDL_SCANCODE_SPACE)) {
+        Game::instance->goToStage(INTRO_STAGE);
+    }
+
 }
 
 
@@ -239,7 +296,7 @@ void IntroStage::onExit() {
 }
 
 void VictoryStage::onEnter() {
-    theme = Audio::Play("data/audio/v_1.wav", 1, BASS_SAMPLE_MONO);
+    theme = Audio::Play("data/audio/idle.wav", 1, BASS_SAMPLE_LOOP);
 }
 
 void VictoryStage::onExit() {

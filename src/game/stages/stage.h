@@ -16,7 +16,8 @@ enum eStages {
     INTRO_STAGE,
     PLAY_STAGE,
     VICTORY_STAGE,
-    LOSING_STAGE
+    LOSING_STAGE,
+    HELP_STAGE
 
 };
 
@@ -46,6 +47,7 @@ public:
     void onExit();
     bool menuInitialized = false;
     EntityUI* background = nullptr;
+    EntityUI* help_button = nullptr;
     EntityUI* play_button = nullptr;
     EntityUI* exit_button = nullptr;
     Camera* camera2d = nullptr;
@@ -77,6 +79,17 @@ public:
     void update(double deltaTime) override;
     void onEnter();
     void onExit();
+    Camera* camera2d = nullptr;
+    EntityUI* end = nullptr;
+
+};
+
+class HelpStage : public Stage {
+    eStages type = HELP_STAGE;
+public:
+    HelpStage();
+    void render() override;
+    void update(double deltaTime) override;
     Camera* camera2d = nullptr;
     EntityUI* end = nullptr;
 

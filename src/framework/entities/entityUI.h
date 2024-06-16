@@ -9,6 +9,7 @@ enum eButtonId{
 	EndButton,
 	PlayAgainButton,
 	MenuButton,
+	HelpButton,
 	Energy_charged,
 	Life
 };

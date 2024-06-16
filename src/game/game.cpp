@@ -56,6 +56,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	stages[PLAY_STAGE] = play_stage;
 	stages[VICTORY_STAGE] = new VictoryStage();
 	stages[LOSING_STAGE] = new LosingStage();
+	stages[HELP_STAGE] = new HelpStage();
 	IntroStage* intro_stage = new IntroStage();
 	stages[INTRO_STAGE] = intro_stage;
 	current_stage = dynamic_cast<Stage*>(intro_stage);
