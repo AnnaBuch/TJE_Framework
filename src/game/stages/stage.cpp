@@ -3,6 +3,7 @@
 #include "framework/includes.h"
 #include "game/world.h"
 #include "game/game.h"
+#include "game/stages/playStage.h"
 #include "framework/entities/EntityMesh.h"
 #include "framework/entities/EntityPlayer.h"
 #include "framework/entities/entityMissile.h"
@@ -219,7 +220,7 @@ void LosingStage::render()
     std::string time_aa = ss.str();
 
 
-    drawText(50, 380, "Total time: " + time_aa, Vector3(0.729, 0.511, 1), 4);
+    drawText(50, 380, "Total time: " + time_aa + "s", Vector3(0.729, 0.511, 1), 4);
     
 }
 
