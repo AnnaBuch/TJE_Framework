@@ -34,18 +34,13 @@ void EntityUI::render(Camera* camera2d) {
 
 	glDisable(GL_CULL_FACE);
 
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC0_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
 	material.shader->enable();
 
 	World* world = World::instance;
-	//Matrix44 viewProj = camera2d->viewprojection_matrix;
 
 	material.shader->setUniform("u_color", material.color);
 	material.shader->setUniform("u_viewprojection", camera2d->viewprojection_matrix);
-	material.shader->setUniform("u_model", model); //sino getGlobalMatrix()
+	material.shader->setUniform("u_model", model); 
 	material.shader->setUniform("u_texture", material.diffuse, 0);
 
 
@@ -53,9 +48,6 @@ void EntityUI::render(Camera* camera2d) {
 
 	material.shader->disable();
 
-	//quad.render(GL_TRIANGLES);
-
-	//glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
@@ -66,17 +58,6 @@ void EntityUI::render(Camera* camera2d) {
 
 void EntityUI::update(float seconds_elapsed) {
 
-	if (buttonId == Energy_charged) {
-		//material.color = Vector4::YELLOW;
-		//float energy_charged = GamePlay::get_instance()->player->energy_charged;
-	}
-	else if (buttonId == Life) {
-		//material.color = Vector4::RED;
-	}
-	else {
-		//material.color = Vector4::WHITE;
-
-	}
 	Entity::update(seconds_elapsed);
 
 }

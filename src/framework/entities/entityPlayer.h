@@ -8,7 +8,6 @@ class EntityPlayer : public EntityMesh
 {
 public:
 	EntityPlayer();
-	//void render(Camera* camera) override;
 	void update(float elapsed_time) override;
 	void render(Camera* camera) override;
 	void testHealthCollisions(const Vector3& target_pos);

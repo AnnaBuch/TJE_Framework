@@ -10,8 +10,6 @@ enum eButtonId{
 	PlayAgainButton,
 	MenuButton,
 	HelpButton,
-	Energy_charged,
-	Life
 };
 
 class EntityUI : public EntityMesh {
@@ -33,8 +31,6 @@ public:
 	Material material;
 
 	void render(Camera* camera2d);
-	void render_energy(Camera* camera2d, float current_stamina);
-	void render_lifes(Camera* camera2d, int current_lifes);
 	void update(float seconds_elapsed);
 
 };
