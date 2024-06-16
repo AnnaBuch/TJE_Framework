@@ -12,6 +12,9 @@
 
 #include <framework/input.h>
 
+#include <iostream>
+#include <iomanip> 
+
 
 IntroStage::IntroStage() {
 
@@ -23,19 +26,19 @@ IntroStage::IntroStage() {
     // Background image
     Material background_mat;
     background_mat.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-    background_mat.diffuse = Texture::Get("data/ui/test_menu.png"); // Replace with your menu image
+    background_mat.diffuse = Texture::Get("data/ui/test_menu.png"); 
     background = new EntityUI(Vector2(world_width * 0.5, world_height * 0.5), Vector2(world_width, world_height), background_mat);
 
     // Play button
     Material play_mat;
     play_mat.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-    play_mat.diffuse = Texture::Get("data/ui/noraml.png"); // Replace with your play button image
+    play_mat.diffuse = Texture::Get("data/ui/noraml.png"); 
     play_button = new EntityUI(Vector2(world_width * 0.5, 390), Vector2(240, 60), play_mat, eButtonId::PlayButton);
 
     // Exit button
     Material exit_mat;
     exit_mat.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-    exit_mat.diffuse = Texture::Get("data/ui/endless.png"); // Replace with your exit button image
+    exit_mat.diffuse = Texture::Get("data/ui/endless.png"); 
     exit_button = new EntityUI(Vector2(world_width * 0.5, 470), Vector2(240, 60), exit_mat, eButtonId::EndButton);
 
 
@@ -74,7 +77,7 @@ void IntroStage::update(double deltaTime) {
             mouse_pos.y < (play_button->position.y + play_button->size.y * 0.5f)) {
 
             World::instance->gameMode = REGULAR;
-            Game::instance->goToStage(PLAY_STAGE);
+            Game::instance->goToStage(VICTORY_STAGE);
         }
         if (exit_button &&
             mouse_pos.x > (exit_button->position.x - exit_button->size.x * 0.5f) &&
@@ -91,20 +94,91 @@ void IntroStage::update(double deltaTime) {
 }
 
 
-VictoryStage::VictoryStage()
-{
+VictoryStage::VictoryStage() {
+    const int numFrames = 200; 
+    int world_width = Game::instance->window_width;
+    int world_height = Game::instance->window_height;
+
+    for (int i = 1; i <= numFrames; ++i) {
+        std::string filename = "data/ui/cinematic/output_" + std::to_string(i) + ".png";
+        printf("Loading frame %s\n", filename.c_str());
+        Texture* texture = Texture::Get(filename.c_str());
+
+        Material frameMat;
+        frameMat.shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+        frameMat.diffuse = texture;
+
+        EntityUI* frameEntity = new EntityUI(Vector2(world_width * 0.5, world_height * 0.5),
+            Vector2(world_width, world_height), frameMat);
+        frames.push_back(frameEntity);
+    }
+
+    currentFrameIndex = 0;
+    frameTimer = 0.0;
+    frameInterval = 0.163; // Interval between frames in seconds 
 }
 
-void VictoryStage::render()
-{
+void VictoryStage::render() {
+    // Render the current frame
+    if (currentFrameIndex < frames.size()) {
+        // printf("currentFrameIndex: %d\n", currentFrameIndex);
+        frames[currentFrameIndex]->render(World::instance->camera2D);
+
+        if (currentFrameIndex == frames.size() - 1) {
+            drawText(200, 100, "   RESULTS", Vector3(0.729, 0.511, 1), 6);
+
+            EntityPlayer* player = World::instance->player;
+            int asteroidsDestroyed = player->asteroids_destorid;
+            int health = player->health;
+            int power = player->power;  
+
+            double destructionPercentage = ((health / 100) * 0.30 + (asteroidsDestroyed / 30) * 0.30 + (power / 15 * 0.40)) * 100;
+
+            // Convert the number to a string and draw it
+            std::string resultsText = "Asteroids Destroyed: " + std::to_string(asteroidsDestroyed);
+            std::string resultsText2 = "Health: " + std::to_string(health);
+            std::string resultsText3 = "Power Containers Collected: " + std::to_string(power);
+            drawText(50, 200, resultsText2.c_str(), Vector3(0.729, 0.511, 1), 4); 
+            drawText(50, 240, resultsText.c_str(), Vector3(0.729, 0.511, 1), 4);
+            drawText(50, 280, resultsText3.c_str(), Vector3(0.729, 0.511, 1), 4);
+            drawText(50, 340, "----------------------------", Vector3(0.729, 0.511, 1), 4);
+
+            std::stringstream ss;
+            ss << std::fixed << std::setprecision(2) << destructionPercentage;
+            std::string destructionPercentageStr = ss.str();
+
+
+            drawText(50, 380, "Destruction Percentage: " + destructionPercentageStr + "%", Vector3(0.729, 0.511, 1), 4);
+
+
+        }
+
+    }
 }
 
-void VictoryStage::update(double deltaTime)
-{
+void VictoryStage::update(double deltaTime) {
+    Stage::update(deltaTime);
+
+    frameTimer += deltaTime;
+
+    // Check if it's time to advance to the next frame
+    if (frameTimer >= frameInterval) {
+        frameTimer = 0.0;
+        if (currentFrameIndex < frames.size() - 1) {
+            currentFrameIndex++;
+        }
+    }
 }
 
-LosingStage::LosingStage()
-{
+VictoryStage::~VictoryStage() {
+    for (EntityUI* frame : frames) {
+        delete frame;
+    }
+    frames.clear();
+}
+
+
+LosingStage::LosingStage(){
 }
 
 void LosingStage::render()
@@ -114,6 +188,8 @@ void LosingStage::render()
 void LosingStage::update(double deltaTime)
 {
 }
+
+
 void IntroStage::onEnter() {
     theme = Audio::Play("data/audio/idle.wav", 1, BASS_SAMPLE_LOOP);
 }
@@ -123,7 +199,7 @@ void IntroStage::onExit() {
 }
 
 void VictoryStage::onEnter() {
-    theme = Audio::Play("data/audio/idle.wav", 1, BASS_SAMPLE_LOOP);
+    theme = Audio::Play("data/audio/victory2.wav", 1, BASS_SAMPLE_MONO);
 }
 
 void VictoryStage::onExit() {

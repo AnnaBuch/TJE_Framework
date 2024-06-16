@@ -52,16 +52,21 @@ public:
 };
 
 
-
-
 class VictoryStage : public Stage {
     eStages type = VICTORY_STAGE;
 public:
     VictoryStage();
+    ~VictoryStage(); // Destructor to clean up dynamically allocated memory
     void render() override;
     void update(double deltaTime) override;
-    void onEnter();
-    void onExit();
+    void onEnter() override;
+    void onExit() override;
+
+private:
+    std::vector<EntityUI*> frames; // Vector to store EntityUI objects for each frame
+    int currentFrameIndex;
+    double frameTimer;
+    double frameInterval;
 };
 
 class LosingStage : public Stage {

@@ -140,21 +140,7 @@ void EntityUI::render(Camera* camera2d) {
 
 void EntityUI::update(float seconds_elapsed) {
 
-	Vector2 mouse_pos = Input::mouse_position;
-
-	if (buttonId != Undefined &&
-		mouse_pos.x > (position.x - size.x * 0.5f) &&
-		mouse_pos.x < (position.x + size.x * 0.5f) &&
-		mouse_pos.y >(position.y - size.y * 0.5f) &&
-		mouse_pos.y < (position.y + size.y * 0.5f)) {
-
-		material.color = Vector4::RED;
-
-		if (Input::isMousePressed(SDL_BUTTON_LEFT)) {
-			//Game::instance->current_stage->onButtonPressed(buttonId); //ONbUTTONPRESSED
-		}
-	}
-	else if (buttonId == Energy_charged) {
+	if (buttonId == Energy_charged) {
 		//material.color = Vector4::YELLOW;
 		//float energy_charged = GamePlay::get_instance()->player->energy_charged;
 	}
