@@ -108,7 +108,7 @@ void IntroStage::update(double deltaTime) {
 
 
 VictoryStage::VictoryStage() {
-    const int numFrames = 37; 
+    const int numFrames = 200; 
     int world_width = Game::instance->window_width;
     int world_height = Game::instance->window_height;
 
@@ -265,16 +265,17 @@ void HelpStage::render()
 
     EntityPlayer* player = World::instance->player;
 
-     drawText(20, 20, "CONTROLS:", Vector3(0.729, 0.511, 1), 5);
-     drawText(20, 100, "AWSD or ARROW KEYS to move", Vector3(0.729, 0.511, 1), 3);
-     drawText(20, 140, "LEFT CLICK to shoot", Vector3(0.729, 0.511, 1), 3);
-     drawText(20, 200, "OBECIVES:", Vector3(0.729, 0.511, 1), 5);
-     drawText(20, 240, "NORMAL: Reach the end and destroy enemy planet", Vector3(0.729, 0.511, 1), 3);
-     drawText(20, 280, "ENDLESS: Destroy as much asteroids as u can", Vector3(0.729, 0.511, 1), 3);
-     drawText(20, 340, "POWERUPS:", Vector3(0.729, 0.511, 1), 5);
-     drawText(20, 380, "HEALTH: Restores health", Vector3(0.729, 0.511, 1), 3);
-     drawText(20, 420, "POWER: Energy to destroy final planet", Vector3(0.729, 0.511, 1), 3);
-     drawText(200, 550, "Press SPACE to go back", Vector3(1, 1, 1), 3);
+    drawText(20, 20, "CONTROLS:", Vector3(0.729, 0.511, 1), 5);
+    drawText(20, 100, "WASD or ARROW KEYS to move", Vector3(0.729, 0.511, 1), 3);
+    drawText(20, 140, "LEFT CLICK to shoot", Vector3(0.729, 0.511, 1), 3);
+    drawText(20, 200, "OBJECTIVES:", Vector3(0.729, 0.511, 1), 5);
+    drawText(20, 240, "NORMAL: Reach the end and destroy enemy planet", Vector3(0.729, 0.511, 1), 3);
+    drawText(20, 280, "ENDLESS: Destroy as many asteroids as you can", Vector3(0.729, 0.511, 1), 3);
+    drawText(20, 340, "POWER-UPS:", Vector3(0.729, 0.511, 1), 5);
+    drawText(20, 380, "HEALTH: Restores health", Vector3(0.729, 0.511, 1), 3);
+    drawText(20, 420, "POWER: Energy to destroy final planet", Vector3(0.729, 0.511, 1), 3);
+    drawText(200, 550, "Press SPACE to go back", Vector3(1, 1, 1), 3);
+
 }
 
 void HelpStage::update(double deltaTime)
